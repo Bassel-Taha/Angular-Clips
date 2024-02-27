@@ -15,7 +15,15 @@
 
       <!-- Add margin if you want to see some of the overlay behind the modal-->
       <div class="py-4 text-left px-6">
-
+        <!--Title-->
+        <div class="flex justify-between items-center pb-4">
+          <!--we can use the content projection multiple times by assigning a select attribute to the ng-content tag-->
+          <ng-content select="[heading]"></ng-content>
+          <!-- Modal Close Button -->
+          <div class="modal-close cursor-pointer z-50">
+            &#x2715;
+          </div>
+        </div>
         <!--Body-->
         <ng-content></ng-content>
       </div>

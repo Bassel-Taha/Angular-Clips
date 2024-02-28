@@ -21,7 +21,8 @@ export class ModalComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    document.body.appendChild(this.ElRef.nativeElement);
+    //todo this code below is to separate the modal from the parent component to the body of the document and separate it from css of the parent component
+    //document.body.appendChild(this.ElRef.nativeElement);
 
     }
 

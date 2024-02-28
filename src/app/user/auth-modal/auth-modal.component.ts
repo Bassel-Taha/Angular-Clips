@@ -14,7 +14,6 @@ import {ModalServiceService} from "../../Services/modal-service.service";
 export class AuthModalComponent {
   constructor(public _modalService: ModalServiceService) {
     this._modalService.Register('auth');
-    this._modalService.Register('test');
   }
 
 }

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {ModalServiceService} from "../Services/modal-service.service";
 
 @Component({
   selector: 'app-nav',
@@ -7,6 +8,12 @@ import { Component } from '@angular/core';
   templateUrl: './nav.component.html',
   styleUrl: './nav.component.css'
 })
-export class NavComponent {
+export class NavComponent implements OnInit{
+  constructor(public _ModalService: ModalServiceService) {
+  }
+
+  ngOnInit(): void {
+
+    }
 
 }

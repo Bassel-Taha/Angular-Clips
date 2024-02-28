@@ -13,13 +13,17 @@ interface IModal {
 
 export class ModalServiceService {
 
-  private Modal : IModal[] = []  ;
+  public Modal : IModal[] = []  ;
   constructor() {
 
   }
 
    Register(id: string){
     this.Modal.push({id: id, Hidden: true});
+  }
+
+  UnRegister(id: string){
+    this.Modal =  this.Modal.filter(x => x.id !== id);
   }
 
   togelVisibility(id : string){

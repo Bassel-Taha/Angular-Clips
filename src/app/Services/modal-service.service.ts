@@ -13,7 +13,7 @@ interface IModal {
 
 export class ModalServiceService {
 
-  public Modal : IModal[] = []  ;
+  private Modal : IModal[] = []  ;
   constructor() {
 
   }

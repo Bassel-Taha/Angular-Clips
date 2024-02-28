@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import {UserModule} from "./user/user.module";
 import {NavComponent} from "./nav/nav.component";
@@ -12,16 +12,6 @@ import {ModalServiceService} from "./Services/modal-service.service";
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit{
+export class AppComponent {
   title = 'AngularClips';
-  showModal : boolean = true
-  constructor(public _modalService : ModalServiceService) {
-
-  }
-  ngOnInit(): void {
-    setInterval(()=> {
-      this.showModal = !this.showModal;
-      console.log(this._modalService.Modal)
-    },1000)
-  }
 }

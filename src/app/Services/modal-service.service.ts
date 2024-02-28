@@ -14,19 +14,23 @@ interface IModal {
 export class ModalServiceService {
 
   private Modal : IModal[] = []  ;
-  constructor() { }
+  constructor() {
 
-  Register(id: string){
+  }
+
+   Register(id: string){
     this.Modal.push({id: id, Hidden: true});
-    console.log(this.Modal);
   }
 
   togelVisibility(id : string){
   let hiddenValue :boolean =  !!this.Modal.find(x => x.id === id)?.Hidden ;
+    console.log(this.Modal.find(x => x.id === id))
+    console.log(this.Modal)
   this.Modal.find(x => x.id === id)!.Hidden = !hiddenValue;
   }
 
   getVisibility(id : string) : boolean{
-    return Boolean(this.Modal.find(x => x.id === id)?.Hidden);
+    console.log(this.Modal);
+    return this.Modal.find(x => x.id === id)!.Hidden;
   }
 }

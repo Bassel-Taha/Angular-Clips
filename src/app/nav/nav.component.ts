@@ -18,7 +18,7 @@ export class NavComponent implements OnInit{
 
   OpenModal($event : Event) {
     $event.preventDefault();
-    this._ModalService.togelVisibility();
+    this._ModalService.togelVisibility('auth');
 
   }
 }

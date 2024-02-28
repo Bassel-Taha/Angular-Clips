@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {ModalComponent} from "../../shared/modal/modal.component";
+import {ModalServiceService} from "../../Services/modal-service.service";
 
 @Component({
   selector: 'app-auth-modal',
@@ -11,5 +12,9 @@ import {ModalComponent} from "../../shared/modal/modal.component";
   styleUrl: './auth-modal.component.css'
 })
 export class AuthModalComponent {
+  constructor(public _modalService: ModalServiceService) {
+    this._modalService.Register('auth');
+    this._modalService.Register('test');
+  }
 
 }

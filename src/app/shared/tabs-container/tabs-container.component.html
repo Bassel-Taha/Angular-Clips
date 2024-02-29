@@ -1,2 +1,12 @@
-<ng-content select="[TabsHeader]"></ng-content>
+<!-- Tabs -->
+<ul TabsHeader class="flex flex-wrap mb-4">
+  @for (tab of tabs ; track $index)
+  {
+  <li class="flex-auto text-center">
+    <a class="block rounded py-3 px-4 transition hover:text-white text-white
+                bg-indigo-400 " href="">{{tab.TabTitle}}</a>
+  </li>
+  }
+</ul>
+
 <ng-content></ng-content>

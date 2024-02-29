@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {AfterContentChecked, Component, Input, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-tabs',
@@ -7,6 +7,19 @@ import {Component, Input} from '@angular/core';
   templateUrl: './tabs.component.html',
   styleUrl: './tabs.component.css'
 })
-export class TabsComponent {
+export class TabsComponent implements  OnInit, AfterContentChecked{
   @Input() TabTitle: string = '';
+  @Input() ActiveTab : boolean = false ;
+  constructor() {
+  }
+
+  ngOnInit(): void {
+
+    }
+
+  ngAfterContentChecked(): void {
+
+    }
+
+
 }

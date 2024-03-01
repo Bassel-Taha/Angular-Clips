@@ -2,6 +2,8 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ModalComponent} from "../../shared/modal/modal.component";
 import {ModalServiceService} from "../../Services/modal-service.service";
 import {SharedModule} from "../../shared/shared.module";
+import {LoginComponent} from "../login/login.component";
+import {RegisterComponent} from "../register/register.component";
 
 @Component({
   selector: 'app-auth-modal',
@@ -9,6 +11,8 @@ import {SharedModule} from "../../shared/shared.module";
   imports: [
     ModalComponent,
     SharedModule,
+    LoginComponent,
+    RegisterComponent,
   ],
   templateUrl: './auth-modal.component.html',
   styleUrl: './auth-modal.component.css'

@@ -25,12 +25,6 @@
     @if(loginFrom.controls.password.getError('minlength') && loginFrom.controls.password.touched && loginFrom.controls.password.dirty)
     {<span class="text-sm text-red-400">Password must be at least 6 characters</span>
     <br>}
-    @if(loginFrom.controls.password.getError('maxlength') && loginFrom.controls.password.touched && loginFrom.controls.password.dirty)
-    {<span class="text-sm text-red-400">Password must be at most 15 characters</span>
-    <br>}
-    @if(loginFrom.controls.password.getError('pattern') && loginFrom.controls.password.touched && loginFrom.controls.password.dirty)
-    {<span class="text-sm text-red-400">Password must contain at least one uppercase, one lowercase, one number and one special character</span>
-      <br>}
 
   </div>
   <button type="submit"

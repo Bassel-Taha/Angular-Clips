@@ -18,8 +18,7 @@ export class LoginComponent {
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('',
       [Validators.required,
-        Validators.minLength(6),
-        Validators.pattern('^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&])[A-Za-z0-9@$!%*?&]{8,}$')
+        Validators.minLength(6)
     ])});
 
 

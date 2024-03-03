@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgClass} from "@angular/common";
-import {Dismiss, DismissInterface, DismissOptions, InstanceOptions} from "flowbite";
+import {Dismiss, DismissInterface, DismissOptions, initDismisses, InstanceOptions} from "flowbite";
 import {AngularFireAuth, AngularFireAuthModule} from "@angular/fire/compat/auth";
 
 @Component({
@@ -17,112 +17,52 @@ import {AngularFireAuth, AngularFireAuthModule} from "@angular/fire/compat/auth"
 })
 export class RegisterComponent {
 
-  status : boolean|null = null;
+  status: boolean | null = null;
+
+  error!:string
 
   registerForm = new FormGroup({
-    name: new FormControl('' ,[ Validators.required , Validators.minLength(3)]),
+    name: new FormControl('', [Validators.required, Validators.minLength(3)]),
 
-    email: new FormControl('' ,[Validators.required, Validators.email]),
+    email: new FormControl('', [Validators.required, Validators.email]),
 
-    age : new FormControl('' ,[Validators.required, Validators.min(10)]),
+    age: new FormControl('', [Validators.required, Validators.min(10)]),
 
-    password: new FormControl('' ,[
+    password: new FormControl('', [
       Validators.required,
       Validators.minLength(6),
       Validators.pattern('^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&])[A-Za-z0-9@$!%*?&]{8,}$')]),
 
-    confirm_password: new FormControl('' ,[Validators.required]),
+    confirm_password: new FormControl('', [Validators.required]),
 
-    phone_number: new FormControl('' ,[
+    phone_number: new FormControl('', [
       Validators.required,
       Validators.minLength(11),
       Validators.maxLength(11)])
   });
-  constructor(private Auth : AngularFireAuth){
+
+  constructor(private Auth: AngularFireAuth) {
   }
 
   async Register() {
     try {
       let userCredential = await this.Auth.createUserWithEmailAndPassword(this.registerForm.value.email as string, this.registerForm.value.password as string)
-      console.log(userCredential);
+      console.log(userCredential.user);
       this.status = true;
-      this.toast();
+      return
     } catch (e) {
       console.log(e);
+       this.error = e as string;
       this.status = false;
-      this.toast();
+      return
     }
 
   }
 
-
-  toast() {
-
-    if (this.status === true) {
-      // target element that will be dismissed
-      const targetEl = document.getElementById('toast-danger ');
-      // optional trigger element
-      const triggerEl = document.getElementById('TasterDangerDismiss');
-      const options: DismissOptions = {
-        transition: 'transition-opacity',
-        duration: 1000,
-        timing: 'ease-out',
-
-        // callback functions
-        onHide: (context, targetEl) => {
-          console.log('element has been dismissed')
-          console.log(targetEl)
-        }
-      };
-
-      // instance options object
-      const instanceOptions: InstanceOptions = {
-        id: 'targetElement',
-        override: true
-      };
-
-      /*
-      * $targetEl (required)
-      * $triggerEl (optional)
-      * options (optional)
-      * instanceOptions (optional)
-      */
-      const dismiss: DismissInterface = new Dismiss(targetEl, triggerEl, options, instanceOptions);
-
-// programmatically hide it
-      dismiss.hide();
-    } else if (this.status === false) {
-      const targetEl = document.getElementById('toast-success ');
-
-      const triggerEl = document.getElementById('TasterSuccessDismiss');
-      const options: DismissOptions = {
-        transition: 'transition-opacity',
-        duration: 1000,
-        timing: 'ease-out',
-
-        // callback functions
-        onHide: (context, targetEl) => {
-          console.log('element has been dismissed')
-          console.log(targetEl)
-        }
-      };
-
-      // instance options object
-      const instanceOptions: InstanceOptions = {
-        id: 'targetElement',
-        override: true
-      };
-
-      /*
-      * $targetEl (required)
-      * $triggerEl (optional)
-      * options (optional)
-      * instanceOptions (optional)
-      */
-      const dismiss: DismissInterface = new Dismiss(targetEl, triggerEl, options, instanceOptions);
-
-      // programmatically hide it
-      dismiss.hide();
-    }
+  dismissaction ($event:HTMLElement){
+    new Dismiss($event,null,   {
+      transition: 'transition-opacity',
+      duration: 500,
+      timing: 'ease-out'}).hide()
   }
 }

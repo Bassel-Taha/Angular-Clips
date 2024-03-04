@@ -21,6 +21,8 @@ export class RegisterComponent {
 
   error!:string
 
+  onsubmition : boolean = false;
+
   registerForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(3)]),
 
@@ -46,14 +48,17 @@ export class RegisterComponent {
 
   async Register() {
     try {
+      this.onsubmition = true;
       let userCredential = await this.Auth.createUserWithEmailAndPassword(this.registerForm.value.email as string, this.registerForm.value.password as string)
       console.log(userCredential.user);
       this.status = true;
+      this.onsubmition = false;
       return
     } catch (e) {
       console.log(e);
        this.error = e as string;
       this.status = false;
+      this.onsubmition = false;
       return
     }
 

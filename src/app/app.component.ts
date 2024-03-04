@@ -27,6 +27,6 @@ import {AngularFireAuth, AngularFireAuthModule} from "@angular/fire/compat/auth"
 export class AppComponent {
   title = 'AngularClips';
   constructor() {
-    AngularFireModule.initializeApp(environment.firebase);
+    AngularFireModule.initializeApp(environment.firebaseConfig);
   }
 }

@@ -16,13 +16,14 @@ import {AngularFireAuth, AngularFireAuthModule} from "@angular/fire/compat/auth"
   styleUrl: './register.component.css'
 })
 export class RegisterComponent {
-
+//var to show or hide the status message
   status: boolean | null = null;
-
+//var to hold the error message
   error!:string
-
+  //var to disable the submit button during the submition
   onsubmition : boolean = false;
 
+  //the regestration FormGroup
   registerForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(3)]),
 
@@ -50,6 +51,7 @@ export class RegisterComponent {
     try {
       this.onsubmition = true;
       let userCredential = await this.Auth.createUserWithEmailAndPassword(this.registerForm.value.email as string, this.registerForm.value.password as string)
+
       console.log(userCredential.user);
       this.status = true;
       this.onsubmition = false;
@@ -69,5 +71,6 @@ export class RegisterComponent {
       transition: 'transition-opacity',
       duration: 500,
       timing: 'ease-out'}).hide()
+    this.status = null;
   }
 }

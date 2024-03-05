@@ -2,7 +2,7 @@ import {importProvidersFrom, Injectable, NgModule} from '@angular/core';
 import {AngularFireAuth} from "@angular/fire/compat/auth";
 import {AngularFirestore, AngularFirestoreCollection} from "@angular/fire/compat/firestore";
 import {FormGroup} from "@angular/forms";
-import {AuthModule, getAuth, provideAuth} from "@angular/fire/auth";
+import {AuthModule, getAuth, provideAuth, user} from "@angular/fire/auth";
 import {initializeApp, provideFirebaseApp} from "@angular/fire/app";
 import {environment} from "../../../environments/environment";
 import {IUser} from "../../models/iuser";
@@ -37,6 +37,9 @@ export class AuthService {
       //the doc funnction will create a new document with the user id as the name of the document "creating a folder to host the data by the id of the user"
       //the set function will set the data of the user in the document as the add function cant work with the doc function
       await this.usercollection.doc(userCredential.user?.uid).set(User);
+
+      //update the user profile with the name of the user so that the displayed name will be the name of the user
+      await userCredential.user?.updateProfile({displayName : User.name})
       let response = {
         isSucces : true,
         user : userCredential,

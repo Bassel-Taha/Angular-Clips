@@ -65,4 +65,27 @@ export class AuthService {
 
   }
 
+  async Login(loginForm : FormGroup) {
+    try {
+      let userCredential = await this.Auth.signInWithEmailAndPassword(loginForm.value.email , loginForm.value.password)
+      this.isUserLogedIn$ =  this.Auth.user.pipe(
+        map(user =>  !!user)
+      )
+      let response = {
+        isSucces : true,
+        user : userCredential,
+        message : null
+      }
+      return  response
+    }
+    catch (e) {
+      let response = {
+        isSucces : false,
+        user : null,
+        message : e as string
+      }
+      return response
+    }
+  }
+
 }

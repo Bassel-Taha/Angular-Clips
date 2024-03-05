@@ -58,7 +58,8 @@ export class RegisterComponent {
 
         this.onsubmition = false;
         return
-      }else
+      }
+      else
       {
         this.error = response.message;
         this.status = false;

@@ -10,7 +10,7 @@ import {getFirestore, provideFirestore} from "@angular/fire/firestore";
 import {getStorage, provideStorage} from "@angular/fire/storage";
 import {AngularFirestoreModule} from "@angular/fire/compat/firestore";
 
-export const appConfig: ApplicationConfig = {
+  export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes), provideClientHydration(),
   importProvidersFrom(
@@ -18,6 +18,5 @@ export const appConfig: ApplicationConfig = {
     provideAuth(()=>getAuth()),
     provideFirestore(()=>getFirestore()),
     provideStorage(()=> getStorage()),
-    AngularFirestoreModule
   )]
 };

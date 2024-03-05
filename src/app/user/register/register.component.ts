@@ -1,9 +1,9 @@
 import {Component} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgClass} from "@angular/common";
-import {Dismiss, DismissInterface, DismissOptions, initDismisses, InstanceOptions} from "flowbite";
-import {AngularFireAuth, AngularFireAuthModule} from "@angular/fire/compat/auth";
-import {AngularFirestore} from "@angular/fire/compat/firestore";
+import {Dismiss} from "flowbite";
+import {AngularFireAuthModule} from "@angular/fire/compat/auth";
+import {AuthService} from "../../Services/AuthService/auth.service";
 
 @Component({
   selector: 'app-register',
@@ -20,11 +20,11 @@ export class RegisterComponent {
 //var to show or hide the status message
   status: boolean | null = null;
 //var to hold the error message
-  error!:string
-  //var to disable the submit button during the submition
+  error?:null | string
+  //var to disable the submit button during the submission
   onsubmition : boolean = false;
 
-  //the regestration FormGroup
+  //the registration FormGroup
   registerForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(3)]),
 
@@ -45,34 +45,29 @@ export class RegisterComponent {
       Validators.maxLength(11)])
   });
 
-  constructor(private Auth: AngularFireAuth, private db : AngularFirestore) {
+  constructor(private Auth: AuthService) {
   }
 
   async Register() {
-    try {
       this.onsubmition = true;
-      let User = {
-        name : this.registerForm.controls.name.value,
-        email : this.registerForm.controls.email.value,
-        age : this.registerForm.controls.age.value,
-        phone : this.registerForm.controls.phone_number.value
+      //using the auth service to create a new user
+      let response =  await this.Auth.Register(this.registerForm);
+      if (response.isSucces) {
+        //the status to show the toast status message
+        this.status = true;
+
+        this.onsubmition = false;
+        return
+      }else
+      {
+        this.error = response.message;
+        this.status = false;
+        this.onsubmition = false;
+        return
       }
-      console.log(await this.db.collection("Users").add(User));
-
-
-      let userCredential =  await this.Auth.createUserWithEmailAndPassword(this.registerForm.value.email as string, this.registerForm.value.password as string)
-      this.status = true;
-      this.onsubmition = false;
-      return
-    } catch (e) {
-       this.error = e as string;
-      this.status = false;
-      this.onsubmition = false;
-      return
-    }
-
   }
 
+//function to dismiss the status message
   dismissaction ($event:HTMLElement){
     new Dismiss($event,null,   {
       transition: 'transition-opacity',

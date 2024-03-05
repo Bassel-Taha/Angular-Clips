@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ModalComponent} from "../../shared/modal/modal.component";
-import {ModalServiceService} from "../../Services/modal-service.service";
+import {ModalServiceService} from "../../Services/ModalService/modal-service.service";
 import {SharedModule} from "../../shared/shared.module";
 import {LoginComponent} from "../login/login.component";
 import {RegisterComponent} from "../register/register.component";

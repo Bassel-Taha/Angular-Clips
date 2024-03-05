@@ -4,6 +4,7 @@ import {NgClass} from "@angular/common";
 import {Dismiss} from "flowbite";
 import {AngularFireAuthModule} from "@angular/fire/compat/auth";
 import {AuthService} from "../../Services/AuthService/auth.service";
+import {ModalServiceService} from "../../Services/ModalService/modal-service.service";
 
 @Component({
   selector: 'app-register',
@@ -45,7 +46,7 @@ export class RegisterComponent {
       Validators.maxLength(11)])
   });
 
-  constructor(private Auth: AuthService) {
+  constructor(private Auth: AuthService, private Modalservice: ModalServiceService) {
   }
 
   async Register() {
@@ -55,7 +56,8 @@ export class RegisterComponent {
       if (response.isSucces) {
         //the status to show the toast status message
         this.status = true;
-
+        //hiding the modal if the registration is successful
+        this.Modalservice.togelVisibility('auth');
         this.onsubmition = false;
         return
       }

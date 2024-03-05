@@ -1,10 +1,11 @@
 import {importProvidersFrom, Injectable, NgModule} from '@angular/core';
 import {AngularFireAuth} from "@angular/fire/compat/auth";
-import {AngularFirestore} from "@angular/fire/compat/firestore";
+import {AngularFirestore, AngularFirestoreCollection} from "@angular/fire/compat/firestore";
 import {FormGroup} from "@angular/forms";
 import {AuthModule, getAuth, provideAuth} from "@angular/fire/auth";
 import {initializeApp, provideFirebaseApp} from "@angular/fire/app";
 import {environment} from "../../../environments/environment";
+import {IUser} from "../../models/iuser";
 
 
 @Injectable({
@@ -14,20 +15,24 @@ import {environment} from "../../../environments/environment";
 })
 export class AuthService {
 
-  constructor(private Auth: AngularFireAuth, private db : AngularFirestore) { }
+  usercollection : AngularFirestoreCollection<IUser>
+
+  constructor(private Auth: AngularFireAuth, private db : AngularFirestore) {
+    this.usercollection = db.collection<IUser>("Users");
+  }
 
   //
   async Register(registerForm : FormGroup) {
     try {
       //creating an object of the values needed to be stored in the database
-      let User = {
+      let User : IUser = {
         name : registerForm.controls["name"].value,
         email : registerForm.controls["email"].value,
         age : registerForm.controls["age"].value,
         phone : registerForm.controls["phone_number"].value
       }
       //add the user to the database
-      await this.db.collection("Users").add(User);
+      await this.usercollection.add(User);
       // here i used the registration.value instead of the registrationForm.get().value or the registrationForm.controls["name"].value
       let userCredential =  await this.Auth.createUserWithEmailAndPassword(registerForm.value.email , registerForm.value.password)
       let response = {

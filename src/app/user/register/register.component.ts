@@ -3,6 +3,7 @@ import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 import {NgClass} from "@angular/common";
 import {Dismiss, DismissInterface, DismissOptions, initDismisses, InstanceOptions} from "flowbite";
 import {AngularFireAuth, AngularFireAuthModule} from "@angular/fire/compat/auth";
+import {AngularFirestore} from "@angular/fire/compat/firestore";
 
 @Component({
   selector: 'app-register',
@@ -44,20 +45,26 @@ export class RegisterComponent {
       Validators.maxLength(11)])
   });
 
-  constructor(private Auth: AngularFireAuth) {
+  constructor(private Auth: AngularFireAuth, private db : AngularFirestore) {
   }
 
   async Register() {
     try {
       this.onsubmition = true;
-      let userCredential = await this.Auth.createUserWithEmailAndPassword(this.registerForm.value.email as string, this.registerForm.value.password as string)
+      let User = {
+        name : this.registerForm.controls.name.value,
+        email : this.registerForm.controls.email.value,
+        age : this.registerForm.controls.age.value,
+        phone : this.registerForm.controls.phone_number.value
+      }
+      console.log(await this.db.collection("Users").add(User));
 
-      console.log(userCredential.user);
+
+      let userCredential =  await this.Auth.createUserWithEmailAndPassword(this.registerForm.value.email as string, this.registerForm.value.password as string)
       this.status = true;
       this.onsubmition = false;
       return
     } catch (e) {
-      console.log(e);
        this.error = e as string;
       this.status = false;
       this.onsubmition = false;

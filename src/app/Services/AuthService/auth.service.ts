@@ -31,10 +31,12 @@ export class AuthService {
         age : registerForm.controls["age"].value,
         phone : registerForm.controls["phone_number"].value
       }
-      //add the user to the database
-      await this.usercollection.add(User);
-      // here i used the registration.value instead of the registrationForm.get().value or the registrationForm.controls["name"].value
+      // here I used the registration.value instead of the registrationForm.get().value or the registrationForm.controls["name"].value
       let userCredential =  await this.Auth.createUserWithEmailAndPassword(registerForm.value.email , registerForm.value.password)
+      //add the user to the database
+      //the doc funnction will create a new document with the user id as the name of the document "creating a folder to host the data by the id of the user"
+      //the set function will set the data of the user in the document as the add function cant work with the doc function
+      await this.usercollection.doc(userCredential.user?.uid).set(User);
       let response = {
         isSucces : true,
         user : userCredential,

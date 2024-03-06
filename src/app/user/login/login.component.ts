@@ -5,6 +5,7 @@ import {Dismiss} from "flowbite";
 import {error} from "@angular/compiler-cli/src/transformers/util";
 import {AuthService} from "../../Services/AuthService/auth.service";
 import {ModalServiceService} from "../../Services/ModalService/modal-service.service";
+import {take, timer} from "rxjs";
 
 @Component({
   selector: 'app-login',
@@ -29,6 +30,8 @@ export class LoginComponent {
 
  public  error : string | null = null;
 
+
+
   constructor(private auth : AuthService, private Modalservice : ModalServiceService) {
 
   }
@@ -52,8 +55,12 @@ export class LoginComponent {
     new Dismiss($event,null,   {
       transition: 'transition-opacity',
       duration: 500,
-      timing: 'ease-out'}).hide()
-    this.status = true;
+      timing: 'ease-out'}).hide();
+    let observable = timer(1000);
+    observable.subscribe(() => {
+      this.status = true;
+      console.log('started')
+    },()=>{},()=>{console.log('completed')})
   }
 
 }

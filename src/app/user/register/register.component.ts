@@ -5,6 +5,7 @@ import {Dismiss} from "flowbite";
 import {AngularFireAuthModule} from "@angular/fire/compat/auth";
 import {AuthService} from "../../Services/AuthService/auth.service";
 import {ModalServiceService} from "../../Services/ModalService/modal-service.service";
+import {timer} from "rxjs";
 
 @Component({
   selector: 'app-register',
@@ -76,6 +77,10 @@ export class RegisterComponent {
       transition: 'transition-opacity',
       duration: 500,
       timing: 'ease-out'}).hide()
-    this.status = null;
+    let observable = timer(1000);
+    observable.subscribe(() => {
+      this.status = true;
+      console.log('started')
+    },()=>{},()=>{console.log('completed')})
   }
 }

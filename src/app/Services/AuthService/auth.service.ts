@@ -5,6 +5,8 @@ import {FormGroup} from "@angular/forms";
 import {IUser} from "../../models/iuser";
 import {map, Observable} from "rxjs";
 import {log} from "node:util";
+import {ToastService} from "../Toast/toast.service";
+import {ResponseDto} from "../../models/response-dto";
 
 
 @Injectable({
@@ -94,7 +96,12 @@ export class AuthService {
 
   async SignOut()
   {
-    this.Auth.signOut();
+    let response:ResponseDto =
+      {
+        result :await this.Auth.signOut() ,
+        isSucces : true
+      }
+      return response
   }
 
 }

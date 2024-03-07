@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ModalServiceService} from "../Services/ModalService/modal-service.service";
 import {AuthService} from "../Services/AuthService/auth.service";
 import {AsyncPipe} from "@angular/common";
+import {ToastService} from "../Services/Toast/toast.service";
 
 @Component({
   selector: 'app-nav',
@@ -13,7 +14,7 @@ import {AsyncPipe} from "@angular/common";
   styleUrl: './nav.component.css'
 })
 export class NavComponent implements OnInit{
-  constructor(public _ModalService: ModalServiceService , public Auth : AuthService) {
+  constructor(public _ModalService: ModalServiceService , public Auth : AuthService, private toast : ToastService) {
   }
 
   ngOnInit(): void {
@@ -24,5 +25,11 @@ export class NavComponent implements OnInit{
     $event.preventDefault();
     this._ModalService.togelVisibility('auth');
 
+  }
+  SignOut()
+  {
+    this.Auth.SignOut()
+    this.toast.show = true;
+    return false
   }
 }

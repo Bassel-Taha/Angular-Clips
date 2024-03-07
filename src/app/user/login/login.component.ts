@@ -6,6 +6,7 @@ import {error} from "@angular/compiler-cli/src/transformers/util";
 import {AuthService} from "../../Services/AuthService/auth.service";
 import {ModalServiceService} from "../../Services/ModalService/modal-service.service";
 import {take, timer} from "rxjs";
+import {ToastService} from "../../Services/Toast/toast.service";
 
 @Component({
   selector: 'app-login',
@@ -32,7 +33,7 @@ export class LoginComponent {
 
 
 
-  constructor(private auth : AuthService, private Modalservice : ModalServiceService) {
+  constructor(private auth : AuthService, private Modalservice : ModalServiceService, public toast :ToastService) {
 
   }
 
@@ -42,6 +43,7 @@ export class LoginComponent {
       this.status = true ;
       console.log(response.user)
       this.Modalservice.togelVisibility('auth');
+      this.toast.show = true
       return
     }
     this.error = response.message;

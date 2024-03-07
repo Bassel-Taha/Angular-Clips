@@ -16,12 +16,21 @@ export class AuthService {
 
   usercollection : AngularFirestoreCollection<IUser>
 
-  isUserLogedIn$! : Observable<boolean>;
+  //observable to know if the user is signed in or not
+  isUserLogedIn$ : Observable<boolean> = this.Auth.user.pipe(
+    map(user => {
+      this.status = !!user
+      return !!user
+    })
+  )
+  // prop te get the toaster hidden after clicking on the X button
+  status? : boolean
+
   constructor(private Auth: AngularFireAuth, private db : AngularFirestore) {
     this.usercollection = db.collection<IUser>("Users");
   }
 
-  //
+  // the registration method
   async Register(registerForm : FormGroup) {
     try {
       //creating an object of the values needed to be stored in the database
@@ -39,9 +48,6 @@ export class AuthService {
       //the set function will set the data of the user in the document as the add function cant work with the doc function
       await this.usercollection.doc(userCredential.user?.uid).set(User);
       //adding an observable to push the boolean value of the login status from the firebase servers depending on the token and all that is handled by the firebase server
-      this.isUserLogedIn$ =  this.Auth.user.pipe(
-        map(user =>  !!user)
-      )
 
 
       //update the user profile with the name of the user so that the displayed name will be the name of the user
@@ -65,12 +71,10 @@ export class AuthService {
 
   }
 
+  //the login method
   async Login(loginForm : FormGroup) {
     try {
       let userCredential = await this.Auth.signInWithEmailAndPassword(loginForm.value.email , loginForm.value.password)
-      this.isUserLogedIn$ =  this.Auth.user.pipe(
-        map(user =>  !!user)
-      )
       let response = {
         isSucces : true,
         user : userCredential,

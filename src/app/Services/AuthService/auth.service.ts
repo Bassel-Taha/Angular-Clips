@@ -92,4 +92,9 @@ export class AuthService {
     }
   }
 
+  async SignOut()
+  {
+    this.Auth.signOut();
+  }
+
 }

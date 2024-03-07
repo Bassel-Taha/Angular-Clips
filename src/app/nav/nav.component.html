@@ -5,28 +5,35 @@
 
     <div class="flex flex-grow items-center">
       <!-- Primary Navigation -->
-      <ul class="flex flex-row mt-1">
+      <ul class="relative flex flex-row mt-1 mr-auto ">
         <!-- Navigation Links -->
-        @if (!(Auth.isUserLogedIn$ | async))
-        {
-        <li>
-          <a class="px-2" (click) ="OpenModal($event)" href="#">Login / Register</a>
-        </li>
-        } @else
-        {
-        <li>
-          <a class="px-2" href="#">Manage</a>
-        </li>
-        <li>
-          <a class="px-2" href="#">Upload</a>
-        </li>
-        <li>
-          <a class="px-2" href="about.html">About</a>
-        </li>
+        @if (!(Auth.isUserLogedIn$ | async)) {
+          <li>
+            <a class="px-2" (click)="OpenModal($event)" href="#">Login / Register</a>
+          </li>
+          <li>
+            <a class="px-2" href="about.html">About</a>
+          </li>
+        } @else {
+          <li>
+            <a class="px-2" href="#">Manage</a>
+          </li>
+          <li>
+            <a class="px-2" href="#">Upload</a>
+          </li>
+          <li>
+            <a class="px-2" href="about.html">About</a>
+          </li>
         }
       </ul>
       <!-- Language Switcher -->
-      <ul class="flex flex-row ml-auto">
+      <ul class="flex flex-row ml-10">
+        @if ((Auth.isUserLogedIn$ |async))
+        {
+        <li class="mr-5">
+          <a class="" href="" (click)="Auth.SignOut()">LogOut</a>
+        </li>
+        }
         <li>
           <a href="#">
             <img

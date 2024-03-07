@@ -284,7 +284,10 @@
 
 </section>
 
-<!-- Auth Modal -->
-<app-auth-modal></app-auth-modal>
+@if(!(auth.isUserLogedIn$|async)){
+  <!-- Auth Modal -->
+  <app-auth-modal></app-auth-modal>
+}
+
 
 

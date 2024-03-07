@@ -6,6 +6,7 @@ import {AngularFireAuthModule} from "@angular/fire/compat/auth";
 import {AuthService} from "../../Services/AuthService/auth.service";
 import {ModalServiceService} from "../../Services/ModalService/modal-service.service";
 import {timer} from "rxjs";
+import {ToastService} from "../../Services/Toast/toast.service";
 
 @Component({
   selector: 'app-register',
@@ -47,7 +48,7 @@ export class RegisterComponent {
       Validators.maxLength(11)])
   });
 
-  constructor(private Auth: AuthService, private Modalservice: ModalServiceService) {
+  constructor(private Auth: AuthService, private Modalservice: ModalServiceService, public toast:ToastService) {
   }
 
   async Register() {
@@ -59,6 +60,7 @@ export class RegisterComponent {
         this.status = true;
         //hiding the modal if the registration is successful
         this.Modalservice.togelVisibility('auth');
+        this.toast.show = true
         this.onsubmition = false;
         return
       }

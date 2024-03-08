@@ -1,18 +1,20 @@
-import {AbstractControl, ValidationErrors} from "@angular/forms";
+import {AbstractControl, ValidationErrors, ValidatorFn} from "@angular/forms";
 
 export class CustomValidators {
 
-  //todo the function isnt dynamic so it cant be reused the next step is to make it dynamic by accepting parameters of the matching controls
-  static passwordMatch(control: AbstractControl) : ValidationErrors | null{
-    let password = control.value.password;
-    let confirm_password = control.value.confirm_password;
+  static MatchingControls(Control : string , MatchingControl : string ):ValidatorFn
+  {
+    return (control: AbstractControl): ValidationErrors | null => {
+      let matcedControl = control.get(Control)?.value;
+      let matchingControl = control.get(MatchingControl)?.value
 
-    if (password === '' || password == null || confirm_password === '' || confirm_password == null) return {controlNotFound : false};
+      if (matcedControl === '' || matcedControl == null || matchingControl === '' || matchingControl == null) return {controlNotFound: false};
 
-    if (password !== confirm_password) {
-      return { NoMatch: true };
+      if (matcedControl !== matchingControl) {
+        return {NoMatch: true};
+      }
+      return null;
     }
-    return null;
   }
 
 }

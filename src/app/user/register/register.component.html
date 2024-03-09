@@ -22,6 +22,8 @@
     {<p class="text-red-400 text-sm">Email is required</p>}
     @if(registerForm.get('email')?.getError('email') && registerForm.get('email')?.touched)
     {<p class="text-red-400 text-sm">Email is invalid</p>}
+    @if(registerForm.get('email')?.getError('EmailTaken') && registerForm.get('email')?.touched)
+    {<p class="text-red-400 text-sm">Email has been taken, Please use another Email</p>}
   </div>
   <!-- Age -->
   <div class="mb-3">

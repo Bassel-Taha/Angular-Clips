@@ -8,6 +8,7 @@ import {ModalServiceService} from "../../Services/ModalService/modal-service.ser
 import {timer} from "rxjs";
 import {ToastService} from "../../Services/Toast/toast.service";
 import {CustomValidators} from "../Validators/custom-validators";
+import {AsyncMailValidator} from "../Validators/async-mail-validator";
 
 @Component({
   selector: 'app-register',
@@ -33,7 +34,7 @@ export class RegisterComponent {
   registerForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(3)]),
 
-    email: new FormControl('', [Validators.required, Validators.email]),
+    email: new FormControl('', [Validators.required, Validators.email], [this.emailValidator.validate]),
 
     age: new FormControl('', [Validators.required, Validators.min(10)]),
 
@@ -50,7 +51,7 @@ export class RegisterComponent {
       Validators.maxLength(11)])
   }, [CustomValidators.MatchingControls("password","confirm_password")]);
 
-  constructor(private Auth: AuthService, private Modalservice: ModalServiceService, public toast:ToastService) {
+  constructor(private Auth: AuthService, private Modalservice: ModalServiceService, public toast:ToastService, public emailValidator:AsyncMailValidator) {
   }
 
   async Register() {

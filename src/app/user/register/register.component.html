@@ -57,7 +57,8 @@
            placeholder="Confirm Password"/>
     @if(registerForm.controls.confirm_password.getError('required') && registerForm.controls.confirm_password.touched)
     {<p class="text-red-400 text-sm">Confirm Password is required</p>}
-    <div>{{registerForm.errors | json}}</div>
+    @if(registerForm.controls.confirm_password.getError('NoMatch') && registerForm.controls.confirm_password.touched)
+    {<p class="text-red-400 text-sm">the passwords dont match</p>}
   </div>
   <!-- Phone Number -->
   <div class="mb-3">

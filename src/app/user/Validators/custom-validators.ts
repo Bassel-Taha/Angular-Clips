@@ -8,7 +8,7 @@ export class CustomValidators {
       let matcedControl = control.get(Control)?.value;
       let matchingControl = control.get(MatchingControl)?.value
 
-      if (matcedControl === '' || matcedControl == null || matchingControl === '' || matchingControl == null) return {controlNotFound: false};
+      if ( matchingControl === '' || matchingControl == null) return {controlNotFound: false};
 
       if (matcedControl !== matchingControl) {
         return {NoMatch: true};

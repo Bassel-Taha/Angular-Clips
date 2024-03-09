@@ -1,12 +1,13 @@
 import {Component} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {NgClass} from "@angular/common";
+import {JsonPipe, NgClass} from "@angular/common";
 import {Dismiss} from "flowbite";
 import {AngularFireAuthModule} from "@angular/fire/compat/auth";
 import {AuthService} from "../../Services/AuthService/auth.service";
 import {ModalServiceService} from "../../Services/ModalService/modal-service.service";
 import {timer} from "rxjs";
 import {ToastService} from "../../Services/Toast/toast.service";
+import {CustomValidators} from "../Validators/custom-validators";
 
 @Component({
   selector: 'app-register',
@@ -14,7 +15,8 @@ import {ToastService} from "../../Services/Toast/toast.service";
   imports: [
     ReactiveFormsModule,
     NgClass,
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    JsonPipe
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
@@ -46,7 +48,7 @@ export class RegisterComponent {
       Validators.required,
       Validators.minLength(11),
       Validators.maxLength(11)])
-  });
+  }, [CustomValidators.MatchingControls("password","confirm_password")]);
 
   constructor(private Auth: AuthService, private Modalservice: ModalServiceService, public toast:ToastService) {
   }

@@ -3,12 +3,14 @@ import {ModalServiceService} from "../Services/ModalService/modal-service.servic
 import {AuthService} from "../Services/AuthService/auth.service";
 import {AsyncPipe} from "@angular/common";
 import {ToastService} from "../Services/Toast/toast.service";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-nav',
   standalone: true,
   imports: [
-    AsyncPipe
+    AsyncPipe,
+    RouterLink
   ],
   templateUrl: './nav.component.html',
   styleUrl: './nav.component.css'

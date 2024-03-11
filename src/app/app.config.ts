@@ -8,11 +8,14 @@ import {environment} from "../environments/environment.development";
 import {getAuth, provideAuth} from "@angular/fire/auth";
 import {getFirestore, provideFirestore} from "@angular/fire/firestore";
 import {getStorage, provideStorage} from "@angular/fire/storage";
-import {AngularFirestoreModule} from "@angular/fire/compat/firestore";
+import {Videoroutes, VideoRoutingModule} from "./video/video-routing.module";
 
   export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes), provideClientHydration(),
+    provideRouter(routes),
+    //must add all the routes to the providers for the server to work properly cuz im using the standalone project
+    provideRouter(Videoroutes) ,
+    provideClientHydration(),
   importProvidersFrom(
     provideFirebaseApp(()=>initializeApp(environment.firebaseConfig)),
     provideAuth(()=>getAuth()),

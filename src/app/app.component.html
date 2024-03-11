@@ -70,11 +70,9 @@
 
 <!-- Header -->
 <app-nav></app-nav>
-
-
 <!-- Main Content -->
+<!--using the router outlet to load the component-->
 <router-outlet></router-outlet>
-
 <!-- Auth Modal -->
 @if(!(auth.isUserLogedIn$|async)){
   <app-auth-modal></app-auth-modal>

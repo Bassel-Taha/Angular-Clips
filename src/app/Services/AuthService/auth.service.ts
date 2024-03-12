@@ -3,10 +3,11 @@ import {AngularFireAuth} from "@angular/fire/compat/auth";
 import {AngularFirestore, AngularFirestoreCollection} from "@angular/fire/compat/firestore";
 import {FormGroup} from "@angular/forms";
 import {IUser} from "../../models/iuser";
-import {map, Observable} from "rxjs";
+import {filter, map, Observable, of, switchMap} from "rxjs";
 import {log} from "node:util";
 import {ToastService} from "../Toast/toast.service";
 import {ResponseDto} from "../../models/response-dto";
+import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 
 
 @Injectable({
@@ -28,8 +29,17 @@ export class AuthService {
   // prop te get the toaster hidden after clicking on the X button
   status? : boolean
 
-  constructor(private Auth: AngularFireAuth, private db : AngularFirestore) {
+  //prop to get the user redirected to the home page after signing out if the page isn't authorized for the un registered users
+  redirect : boolean = false
+  constructor(private Auth: AngularFireAuth, private db : AngularFirestore, private route:ActivatedRoute, private router:Router) {
     this.usercollection = db.collection<IUser>("Users");
+    this.router.events.pipe(
+      filter(x=> x instanceof NavigationEnd),
+      map(x=> {
+        return this.route.firstChild
+      }),
+      switchMap( rout => rout?.data ?? of({AuthOnly : false}) )
+    ).subscribe(data => { this.redirect = data.AuthOnly ?? false })
   }
 
   // the registration method
@@ -101,6 +111,11 @@ export class AuthService {
         result :await this.Auth.signOut() ,
         isSucces : true
       }
+
+    if(this.redirect){
+        this.router.navigate(["/"])
+      }
+
       return response
   }
 

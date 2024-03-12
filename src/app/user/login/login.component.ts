@@ -41,7 +41,6 @@ export class LoginComponent {
    let response =  await this.auth.Login(this.loginFrom)
     if (response.isSucces) {
       this.status = true ;
-      console.log(response.user)
       this.Modalservice.togelVisibility('auth');
       this.toast.show = true
       return

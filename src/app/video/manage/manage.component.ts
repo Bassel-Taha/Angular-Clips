@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-manage',
@@ -7,6 +8,12 @@ import { Component } from '@angular/core';
   templateUrl: './manage.component.html',
   styleUrl: './manage.component.css'
 })
-export class ManageComponent {
+export class ManageComponent implements OnInit{
+  constructor(private route : ActivatedRoute) {
+  }
+    ngOnInit(): void {
+      this.route.data.subscribe(console.log)
+
+    }
 
 }

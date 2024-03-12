@@ -4,7 +4,7 @@ import {ManageComponent} from "./manage/manage.component";
 import {routes} from "../app.routes";
 
 export const Videoroutes: Routes = [
-  {path:'manage', component: ManageComponent},
+  {path:'manage', component: ManageComponent , data:{ AuthOnly: true}},
 ];
 
 @NgModule({

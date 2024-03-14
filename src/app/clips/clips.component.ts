@@ -1,10 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-clips',
   standalone: true,
-  imports: [],
+  imports: [
+    RouterLink
+  ],
   templateUrl: './clips.component.html',
   styleUrl: './clips.component.css'
 })
@@ -15,7 +17,7 @@ export class ClipsComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.id = this.route.snapshot.params["id"]
+   this.route.params.subscribe(params => { this.id = params["id"] })
 
     }
 

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {RouterLink, RouterLinkActive} from "@angular/router";
+import {ActivatedRoute, Router, RouterLink, RouterLinkActive} from "@angular/router";
 
 @Component({
   selector: 'app-manage',
@@ -12,11 +12,24 @@ import {RouterLink, RouterLinkActive} from "@angular/router";
   styleUrl: './manage.component.css'
 })
 export class ManageComponent implements OnInit {
-  constructor() {
+
+  VideoSort = '1';
+  constructor(private router : Router, private route : ActivatedRoute,  ) {
   }
 
   ngOnInit(): void {
 
+    this.route.queryParams.subscribe((params) => {
+      this.VideoSort = params['sort'] === '2' ? params['sort'] : '1';
+    } );
+
+  }
+
+
+  Sort(event : Event)
+  {
+    this.VideoSort = (event.target as HTMLInputElement).value;
+    this.router.navigate([], {queryParams: {sort: this.VideoSort} , relativeTo: this.route});
   }
 
 }

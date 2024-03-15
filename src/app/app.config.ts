@@ -12,9 +12,10 @@ import {Videoroutes, VideoRoutingModule} from "./video/video-routing.module";
 
   export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes),
     //must add all the routes to the providers for the server to work properly cuz im using the standalone project
-    provideRouter(Videoroutes) ,
+    provideRouter(Videoroutes),
+    //must put routes after the rest of the routes providers to as it will have the 404 error
+    provideRouter(routes),
     provideClientHydration(),
   importProvidersFrom(
     provideFirebaseApp(()=>initializeApp(environment.firebaseConfig)),

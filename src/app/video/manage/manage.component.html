@@ -6,8 +6,8 @@
 
     <!-- Sort Videos -->
     <select class="text-black px-8 text-xl outline-none appearance-none" (change)="Sort($event)">
-      <option value="1">Recent Uploads</option>
-      <option value="2">Oldest Uploads</option>
+      <option value="1" [selected]="VideoSort === '1'">Recent Uploads</option>
+      <option value="2" [selected]="VideoSort === '2'">Oldest Uploads</option>
     </select>
   </div>
 </section>

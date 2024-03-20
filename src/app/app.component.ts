@@ -11,6 +11,7 @@ import {ToastService} from "./Services/Toast/toast.service";
 import {AuthService} from "./Services/AuthService/auth.service";
 import {VideoRoutingModule} from "./video/video-routing.module";
 import {VideoModule} from "./video/video.module";
+import {AngularFireAuthGuard, AngularFireAuthGuardModule} from "@angular/fire/compat/auth-guard";
 
 ;
 
@@ -27,6 +28,7 @@ import {VideoModule} from "./video/video.module";
     AngularFireAuthModule,
     AsyncPipe,
     VideoModule,
+    AngularFireAuthGuardModule,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',

@@ -9,6 +9,8 @@ import {getAuth, provideAuth} from "@angular/fire/auth";
 import {getFirestore, provideFirestore} from "@angular/fire/firestore";
 import {getStorage, provideStorage} from "@angular/fire/storage";
 import {Videoroutes, VideoRoutingModule} from "./video/video-routing.module";
+import {AuthGuardModule} from "@angular/fire/auth-guard";
+import {AngularFireAuthGuard} from "@angular/fire/compat/auth-guard";
 
   export const appConfig: ApplicationConfig = {
   providers: [
@@ -22,5 +24,6 @@ import {Videoroutes, VideoRoutingModule} from "./video/video-routing.module";
     provideAuth(()=>getAuth()),
     provideFirestore(()=>getFirestore()),
     provideStorage(()=> getStorage()),
+
   )]
 };

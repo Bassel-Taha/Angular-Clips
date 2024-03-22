@@ -7,9 +7,16 @@
 
     <!-- Upload Dropbox -->
     <div app-event-blocker
+         (dragend)="isDragedOver = false"
+         (dragover)="isDragedOver = true"
+         (dragenter)="isDragedOver = true"
+         (dragleave)="isDragedOver = false"
+         (mouseleave)="isDragedOver = false"
+         (drop)="StoreFile($event)"
+         [ngClass]="{ 'bg-indigo-400 text-indigo-100 border-indigo-400 border-solid' : isDragedOver}"
       class="w-full px-10 py-40 rounded text-center cursor-pointer border border-dashed
           border-gray-400 transition duration-500 hover:text-white
-          hover:bg-indigo-400 hover:border-indigo-400 hover:border-solid text-xl">
+          hover:bg-indigo-400 hover:border-indigo-400 hover:border-solid text-xl  ">
       <h5>Drop your file here (mp4 only!)</h5>
     </div>
 

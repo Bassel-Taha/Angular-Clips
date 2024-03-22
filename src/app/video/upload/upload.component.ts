@@ -38,7 +38,7 @@ export class UploadComponent implements OnInit {
     //check if the file is uploaded successfully and checking if it's a video file
     // the type of the file should be video/mp4 ====>> " that's a mime type for video with the mp4 formatting for any other mime type search the web for it"
     if(!this.dropedFile || this.dropedFile.type !== 'video/mp4'){
-
+      this.dropedFile = null;
       return console.error('The file is not a video file');
     }
 

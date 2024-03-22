@@ -13,16 +13,25 @@
          (dragleave)="isDragedOver = false"
          (mouseleave)="isDragedOver = false"
          (drop)="StoreFile($event)"
-         [ngClass]="{ 'bg-indigo-400 text-indigo-100 border-indigo-400 border-solid' : isDragedOver}"
+         [ngClass]="{'bg-indigo-400 text-indigo-100 border-indigo-400 border-solid' : isDragedOver}"
       class="w-full px-10 py-40 rounded text-center cursor-pointer border border-dashed
           border-gray-400 transition duration-500 hover:text-white
-          hover:bg-indigo-400 hover:border-indigo-400 hover:border-solid text-xl  ">
+          hover:bg-indigo-400 hover:border-indigo-400 hover:border-solid text-xl">
+      @if (dropedFile == null)
+      {
       <h5>Drop your file here (mp4 only!)</h5>
+      }
+      @else
+      {
+        <h5>{{dropedFile.name}}</h5>
+      }
     </div>
 
     <!-- Video Editor -->
     <div>
 
+      @if (dropedFile !== null)
+      {
       <!-- Form -->
       <form>
         <!-- Screenshots -->
@@ -52,6 +61,7 @@
           </button>
         </div>
       </form>
+      }
     </div>
   </div>
 </section>

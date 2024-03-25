@@ -1,36 +1,27 @@
-# Web App using Angular 17, Tailwind CSS, FlowBite, Firebase, and Web Assembly
+# AngularClips
 
-## Overview
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.2.1.
 
-This is a fully functional web application built using Angular 17, Tailwind CSS, and FlowBite. It uses Firebase for server-side operations and database management. The application also leverages Web Assembly for uploading and editing videos on the site.
+## Development server
 
-## Features
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-- **Angular 17**: This project is built using Angular 17, a platform for building web applications.
-- **Tailwind CSS & FlowBite**: The UI is designed using Tailwind CSS, a utility-first CSS framework, and FlowBite, a set of components and utilities for Tailwind CSS.
-- **Firebase**: Firebase is used for server-side operations, Authentication and Authorization for the Application, As well as a database for the application.
-- **Web Assembly**: Web Assembly is used for editing videos on the site.
+## Code scaffolding
 
-## OverView
-<img src="Templates/ReadMeAssets/1.png" style="width:100%">
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-<img src="Templates/ReadMeAssets/2.png" style="width:100%">
+## Build
 
-## Installation
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
-1. Clone the repository
-2. Install dependencies with `npm install`
-3. Set up your Firebase configuration
-4. Run the application with `ng serve`
+## Running unit tests
 
-## Usage
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-After running `ng serve`, navigate to `http://localhost:4200/` in your web browser. The app will automatically reload if you change any of the source files.
+## Running end-to-end tests
 
-## Contributing
+Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
 
-Contributions are welcome. Please read the CONTRIBUTING.md for details on our code of conduct, and the process for submitting pull requests.
+## Further help
 
-## License
-
-This project is licensed under the MIT License - see the LICENSE.md file for details.
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.

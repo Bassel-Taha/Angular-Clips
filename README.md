@@ -6,6 +6,10 @@ This is a front-end project built using the Angular framework.
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
+## OverView
+<img src="Templates/ReadMeAssets/1.png" style="width : 100%">
+<img src="Templates/ReadMeAssets/2.png" style="width : 100%">
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.

@@ -5,9 +5,10 @@ import {log} from "node:util";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {AngularFireStorage} from "@angular/fire/compat/storage";
 import {v4} from 'uuid';
-import {concatMap, timer} from "rxjs";
+import {last, timer} from "rxjs";
 import {Dismiss, DismissOptions} from "flowbite";
 import {subscribe} from "node:diagnostics_channel";
+import {error} from "@angular/compiler-cli/src/transformers/util";
 
 @Component({
   selector: 'app-upload',
@@ -33,9 +34,11 @@ export class UploadComponent implements OnInit {
   public TitleFormGroup: FormGroup = new FormGroup({Title: this.Title});
 
   public insubmition: boolean = false;
-  public showAlert: boolean = false;
+  public showUploadAlert: boolean = false;
   public alertMessage: string = 'Please wait while the file is being uploaded...';
   public uploadPercentage: number = 0;
+  public showUploadSuccess: boolean = false;
+  public showUploadError: boolean = false;
 
   constructor(private _store: AngularFireStorage) {
   }
@@ -67,14 +70,17 @@ export class UploadComponent implements OnInit {
     //the path to store the file in the storage bucket to make all the files in the same folder
     const clipPath = `clips/${clipeFileName}.mp4`;
 
-    this.showAlert = true;
+    //setting the alert message and the insubmition to true to show the alert
+    this.showUploadAlert = true;
     this.insubmition = true;
 
 
     //uploading the file to the storage bucket using the Firebase storage service
     const uploadTask = this._store.upload(clipPath, this.dropedFile)
     uploadTask.percentageChanges().subscribe((progress) => {
-        this.uploadPercentage = (progress as number / 100) ?? 0;
+        this.uploadPercentage = (progress as number / 100);
+
+        //checking if the progress is 100% to show the alert message either the file is uploaded successfully or not
         if (progress === 100) {
           this.alertMessage = 'The file is uploaded successfully';
 
@@ -83,16 +89,45 @@ export class UploadComponent implements OnInit {
             duration: 1000,
             timing: 'ease-out'
           };
-          const targetElement = document.getElementById('alert');
 
+          //getting the target element to dismiss the alert message after 1 second
+          const targetElement = document.getElementById('alert');
           new Dismiss(targetElement, null, options).hide();
-          timer(1000).subscribe(() => {
-            this.showAlert = false;
-            this.insubmition = false;
-          });
+
+
+          //showing the success alert
+          uploadTask.snapshotChanges().pipe(last()).subscribe({
+            //handling the success of the file uploaded successfully by showing the success alert
+            next: () => {
+              //hidding the progress alert
+              this.showUploadAlert = false;
+              this.insubmition = false;
+              //showing the success alert
+              this.showUploadSuccess = true;
+              timer(1000).subscribe(() => {
+                //getting the target element to dismiss the alert message after 1 second
+                const targetElement = document.getElementById('alertSuccess');
+                new Dismiss(targetElement, null, options).hide();
+              });
+            },
+            //handling the error if the file is not uploaded successfully by showing the error alert
+            error: (error) => {
+              console.error(error);
+              //hidding the progress alert
+              this.showUploadAlert = false;
+              this.insubmition = false;
+              //showing the error alert
+              this.showUploadError = true;
+              timer(1000).subscribe(() => {
+                //getting the target element to dismiss the alert message after 1 second
+                const targetElement = document.getElementById('alertError');
+                new Dismiss(targetElement, null, options).hide();
+              });
+            }
+          })
         }
       }
-    );
+    )
   }
 }
 

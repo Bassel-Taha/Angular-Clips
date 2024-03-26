@@ -24,6 +24,7 @@ import {AngularFireAuthGuard} from "@angular/fire/compat/auth-guard";
     provideAuth(()=>getAuth()),
     provideFirestore(()=>getFirestore()),
     provideStorage(()=> getStorage()),
+    provideFirestore(()=>getFirestore()),
 
   )]
 };

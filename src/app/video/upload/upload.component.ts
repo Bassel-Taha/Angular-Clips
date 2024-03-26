@@ -3,6 +3,8 @@ import {EventBlockerDirective} from "../../shared/directives/event-blocker.direc
 import {NgClass} from "@angular/common";
 import {log} from "node:util";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {AngularFireStorage} from "@angular/fire/compat/storage";
+import { v4 } from 'uuid';
 
 @Component({
   selector: 'app-upload',
@@ -26,7 +28,7 @@ export class UploadComponent implements OnInit {
   //the formGroup for the title forms
   public TitleFormGroup : FormGroup = new FormGroup({ Title : this.Title});
 
-  constructor() {
+  constructor(private _store : AngularFireStorage) {
   }
 
   ngOnInit(): void {
@@ -51,6 +53,13 @@ export class UploadComponent implements OnInit {
   }
 
   SubmitForm() {
+    //creating a unique file name for the file to be uploaded
+    const clipeFileName = v4();
+    //the path to store the file in the storage bucket to make all the files in the same folder
+    const clipPath = `clips/${clipeFileName}.mp4`;
+
+    this._store.upload(clipPath, this.dropedFile)
+
     console.log("Upload The File");
   }
 }

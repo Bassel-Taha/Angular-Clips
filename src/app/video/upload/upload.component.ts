@@ -2,13 +2,15 @@ import {Component, OnInit} from '@angular/core';
 import {EventBlockerDirective} from "../../shared/directives/event-blocker.directive";
 import {NgClass} from "@angular/common";
 import {log} from "node:util";
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-upload',
   standalone: true,
   imports: [
     EventBlockerDirective,
-    NgClass
+    NgClass,
+    ReactiveFormsModule
   ],
   templateUrl: './upload.component.html',
   styleUrl: './upload.component.css'
@@ -19,6 +21,10 @@ export class UploadComponent implements OnInit {
   public isDragedOver: boolean = false;
   // the property to store the file dropped in the drop zone
   public dropedFile : File | null = null;
+  //using an object of options for the form control to make it nonnull-able and adding the validations
+  public Title= new FormControl('', {validators:[Validators.required, Validators.minLength(3)], nonNullable : true} )
+  //the formGroup for the title forms
+  public TitleFormGroup : FormGroup = new FormGroup({ Title : this.Title});
 
   constructor() {
   }
@@ -41,7 +47,10 @@ export class UploadComponent implements OnInit {
       this.dropedFile = null;
       return console.error('The file is not a video file');
     }
+    this.Title.setValue(this.dropedFile.name.replace(/\.[^/.]+$/, ""));
+  }
 
-    console.log(this.dropedFile);
+  SubmitForm() {
+    console.log("Upload The File");
   }
 }

@@ -80,52 +80,56 @@ export class UploadComponent implements OnInit {
     uploadTask.percentageChanges().subscribe((progress) => {
         this.uploadPercentage = (progress as number / 100);
 
+        //the options for the dismiss alert message
+      const options: DismissOptions = {
+        transition: 'transition-opacity',
+        duration: 1000,
+        timing: 'ease-out'
+      };
+
         //checking if the progress is 100% to show the alert message either the file is uploaded successfully or not
         if (progress === 100) {
-          this.alertMessage = 'The file is uploaded successfully';
 
-          const options: DismissOptions = {
-            transition: 'transition-opacity',
-            duration: 1000,
-            timing: 'ease-out'
-          };
 
           //getting the target element to dismiss the alert message after 1 second
-          const targetElement = document.getElementById('alert');
-          new Dismiss(targetElement, null, options).hide();
-
-
-          //showing the success alert
-          uploadTask.snapshotChanges().pipe(last()).subscribe({
-            //handling the success of the file uploaded successfully by showing the success alert
-            next: () => {
-              //hidding the progress alert
-              this.showUploadAlert = false;
-              this.insubmition = false;
-              //showing the success alert
-              this.showUploadSuccess = true;
-              timer(1000).subscribe(() => {
-                //getting the target element to dismiss the alert message after 1 second
-                const targetElement = document.getElementById('alertSuccess');
-                new Dismiss(targetElement, null, options).hide();
-              });
-            },
-            //handling the error if the file is not uploaded successfully by showing the error alert
-            error: (error) => {
-              console.error(error);
-              //hidding the progress alert
-              this.showUploadAlert = false;
-              this.insubmition = false;
-              //showing the error alert
-              this.showUploadError = true;
-              timer(1000).subscribe(() => {
-                //getting the target element to dismiss the alert message after 1 second
-                const targetElement = document.getElementById('alertError');
-                new Dismiss(targetElement, null, options).hide();
-              });
-            }
-          })
+          /*const targetElement = document.getElementById('alert');
+          new Dismiss(targetElement, null, options).hide();*/
         }
+
+        //showing the success alert
+        uploadTask.snapshotChanges().pipe(last()).subscribe({
+          //handling the success of the file uploaded successfully by showing the success alert
+          next: () => {
+            this.alertMessage = 'The file is uploaded successfully';
+            //hidding the progress alert
+            this.showUploadAlert = false;
+            this.insubmition = false;
+            //showing the success alert
+            this.showUploadSuccess = true;
+            //getting the target element to dismiss the alert message after 1 second
+            const targetElement = document.getElementById('alertSuccess');
+            new Dismiss(targetElement, null, options).hide();
+            timer(1070).subscribe(() => {
+              this.showUploadSuccess = false;
+            });
+          },
+          //handling the error if the file is not uploaded successfully by showing the error alert
+          error: (error) => {
+            console.error(error);
+            //hidding the progress alert
+            this.showUploadAlert = false;
+            this.insubmition = false;
+            //showing the error alert
+            this.showUploadError = true;
+            //getting the target element to dismiss the alert message after 1 second
+            const targetElement = document.getElementById('alertError');
+            new Dismiss(targetElement, null, options).hide();
+            timer(1070).subscribe(() => {
+              this.showUploadError = false;
+            });
+          }
+        })
+
       }
     )
   }

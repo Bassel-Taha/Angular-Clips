@@ -5,10 +5,13 @@ import {log} from "node:util";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {AngularFireStorage} from "@angular/fire/compat/storage";
 import {v4} from 'uuid';
-import {last, timer} from "rxjs";
+import {last, switchMap, timer} from "rxjs";
 import {Dismiss, DismissOptions} from "flowbite";
 import {subscribe} from "node:diagnostics_channel";
 import {error} from "@angular/compiler-cli/src/transformers/util";
+import {AngularFireAuth} from "@angular/fire/compat/auth";
+import {FirebaseApp} from "@angular/fire/app";
+import firebase from "firebase/compat/app";
 
 @Component({
   selector: 'app-upload',
@@ -33,6 +36,7 @@ export class UploadComponent implements OnInit {
   //the formGroup for the title forms
   public TitleFormGroup: FormGroup = new FormGroup({Title: this.Title});
 
+  //the alert showing properties
   public insubmition: boolean = false;
   public showUploadAlert: boolean = false;
   public alertMessage: string = 'Please wait while the file is being uploaded...';
@@ -40,7 +44,15 @@ export class UploadComponent implements OnInit {
   public showUploadSuccess: boolean = false;
   public showUploadError: boolean = false;
 
-  constructor(private _store: AngularFireStorage) {
+
+  //the user property to store the user data
+  public user :firebase.User | null = null
+
+  constructor(private _store: AngularFireStorage , private auth : AngularFireAuth) {
+    //getting the user data from the auth service to store it in the user property
+    this.auth.user.subscribe(user => {
+      this.user = user;
+    })
   }
 
   ngOnInit(): void {
@@ -77,6 +89,11 @@ export class UploadComponent implements OnInit {
 
     //uploading the file to the storage bucket using the Firebase storage service
     const uploadTask = this._store.upload(clipPath, this.dropedFile)
+
+    //creating clipRef to get the download URL of the file uploaded
+    const clipRef = this._store.ref(clipPath);
+
+    //the observable to get the percentage of the file uploaded
     uploadTask.percentageChanges().subscribe((progress) => {
         this.uploadPercentage = (progress as number / 100);
 
@@ -97,9 +114,19 @@ export class UploadComponent implements OnInit {
         }
 
         //showing the success alert
-        uploadTask.snapshotChanges().pipe(last()).subscribe({
+        uploadTask.snapshotChanges().pipe(last(), switchMap(()=> {
+         return clipRef.getDownloadURL()
+        } ) ).subscribe({
           //handling the success of the file uploaded successfully by showing the success alert
-          next: () => {
+          next: (url) => {
+            let clip = {
+              uid : this.user?.uid,
+              displayName : this.user?.displayName,
+              title: this.Title.value,
+              fileName: clipPath,
+              url: url
+            }
+            console.log(clip);
             this.alertMessage = 'The file is uploaded successfully';
             //hidding the progress alert
             this.showUploadAlert = false;
@@ -109,6 +136,7 @@ export class UploadComponent implements OnInit {
             //getting the target element to dismiss the alert message after 1 second
             const targetElement = document.getElementById('alertSuccess');
             new Dismiss(targetElement, null, options).hide();
+            //using the timer observable to hide the alert message after 1 second
             timer(1070).subscribe(() => {
               this.showUploadSuccess = false;
             });

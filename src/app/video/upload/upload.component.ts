@@ -12,6 +12,7 @@ import {error} from "@angular/compiler-cli/src/transformers/util";
 import {AngularFireAuth} from "@angular/fire/compat/auth";
 import {FirebaseApp} from "@angular/fire/app";
 import firebase from "firebase/compat/app";
+import {ClipService} from "../../Services/ClipService/clip.service";
 
 @Component({
   selector: 'app-upload',
@@ -46,9 +47,9 @@ export class UploadComponent implements OnInit {
 
 
   //the user property to store the user data
-  public user :firebase.User | null = null
+  public user: firebase.User | null = null
 
-  constructor(private _store: AngularFireStorage , private auth : AngularFireAuth) {
+  constructor(private _store: AngularFireStorage, private auth: AngularFireAuth, private _clipservice: ClipService) {
     //getting the user data from the auth service to store it in the user property
     this.auth.user.subscribe(user => {
       this.user = user;
@@ -98,11 +99,11 @@ export class UploadComponent implements OnInit {
         this.uploadPercentage = (progress as number / 100);
 
         //the options for the dismiss alert message
-      const options: DismissOptions = {
-        transition: 'transition-opacity',
-        duration: 1000,
-        timing: 'ease-out'
-      };
+        const options: DismissOptions = {
+          transition: 'transition-opacity',
+          duration: 1000,
+          timing: 'ease-out'
+        };
 
         //checking if the progress is 100% to show the alert message either the file is uploaded successfully or not
         if (progress === 100) {
@@ -114,19 +115,22 @@ export class UploadComponent implements OnInit {
         }
 
         //showing the success alert
-        uploadTask.snapshotChanges().pipe(last(), switchMap(()=> {
-         return clipRef.getDownloadURL()
-        } ) ).subscribe({
+        uploadTask.snapshotChanges().pipe( switchMap(() => {
+          return clipRef.getDownloadURL()
+        })).subscribe({
           //handling the success of the file uploaded successfully by showing the success alert
           next: (url) => {
             let clip = {
-              uid : this.user?.uid,
-              displayName : this.user?.displayName,
+              uid: this.user?.uid as string,
+              displayName: this.user?.displayName as string,
               title: this.Title.value,
               fileName: clipPath,
               url: url
             }
+            /*//adding the clip to the database
+            this._clipservice.AddClip(clip);*/
             console.log(clip);
+
             this.alertMessage = 'The file is uploaded successfully';
             //hidding the progress alert
             this.showUploadAlert = false;

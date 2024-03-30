@@ -22,6 +22,8 @@
       }
     </div>
 
+    <input type="file" class="m-5" (change)="StoreFile($event)">
+
     <!--Upload alert -->
     <div  id="alert">
     @if (showUploadAlert) {

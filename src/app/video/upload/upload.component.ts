@@ -61,12 +61,17 @@ export class UploadComponent implements OnInit {
   }
 
   // the function to store the file dropped in the drop zone and set the is-dragged-over to false
-  StoreFile($event: DragEvent) {
+  StoreFile($event : any) {
+
+
     this.isDragedOver = false;
 
     //there is a problem with the browser to get the dropped files from the event to get it from the dataTransfer property of the event
     //we need to get the first file from the files array and store it in a separate property
-    this.dropedFile = $event.dataTransfer?.files[0] ?? null;
+    this.dropedFile = ($event as DragEvent).dataTransfer ?
+      //checking if the file is dropped from the drag event or from the input file as both have different properties storing the file
+                       ($event as DragEvent).dataTransfer?.files[0] ?? null :
+                        ($event.target as HTMLInputElement).files?.item(0) ?? null ;
 
     //check if the file is uploaded successfully and checking if it's a video file
     // the type of the file should be video/mp4 ====>> " that's a mime type for video with the mp4 formatting for any other mime type search the web for it"

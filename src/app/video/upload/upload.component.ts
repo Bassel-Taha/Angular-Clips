@@ -78,6 +78,8 @@ export class UploadComponent implements OnInit {
   }
 
   UploadFile() {
+    //disabling the form so that the user cant change the form after stating the upload
+    this.TitleFormGroup.disable();
     //creating a unique file name for the file to be uploaded
     const clipeFileName = v4();
     //the path to store the file in the storage bucket to make all the files in the same folder
@@ -110,6 +112,7 @@ export class UploadComponent implements OnInit {
     uploadTask.snapshotChanges().pipe(last(), switchMap(() => {
       return clipRef.getDownloadURL()
     })).subscribe({
+
       //handling the success of the file uploaded successfully by showing the success alert
       next: (url) => {
         let clip = {
@@ -126,16 +129,20 @@ export class UploadComponent implements OnInit {
         //hiding the progress alert
         this.showUploadAlert = false;
         this.insubmition = false;
+
         //showing the success alert
         this.showUploadSuccess = true;
         //getting the target element to dismiss the alert message after 1 second
         const targetElement = document.getElementById('alertSuccess');
-        new Dismiss(targetElement, null, options).hide();
-        //using the timer observable to hide the alert message after 1 second
-        timer(1070).subscribe(() => {
+        let DismissElement =  new Dismiss(targetElement, null, options)
+        DismissElement.hide();
+        DismissElement.updateOnHide(() => {
           this.showUploadSuccess = false;
         });
+        //using the timer observable to hide the alert message after 1 second
+        this.TitleFormGroup.enable();
       },
+
       //handling the error if the file is not uploaded successfully by showing the error alert
       error: (error) => {
         console.error(error);
@@ -146,10 +153,12 @@ export class UploadComponent implements OnInit {
         this.showUploadError = true;
         //getting the target element to dismiss the alert message after 1 second
         const targetElement = document.getElementById('alertError');
-        new Dismiss(targetElement, null, options).hide();
-        timer(1070).subscribe(() => {
+        let DismissElement = new Dismiss(targetElement, null, options);
+        DismissElement.hide();
+        DismissElement.updateOnHide(() => {
           this.showUploadError = false;
         });
+        this.TitleFormGroup.enable();
       }
     });
   }

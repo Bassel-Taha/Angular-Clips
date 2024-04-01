@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {EventBlockerDirective} from "../../shared/directives/event-blocker.directive";
 import {NgClass, PercentPipe} from "@angular/common";
 import {log} from "node:util";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {AngularFireStorage} from "@angular/fire/compat/storage";
+import {AngularFireStorage, AngularFireUploadTask} from "@angular/fire/compat/storage";
 import {v4} from 'uuid';
 import {last, switchMap, timer} from "rxjs";
 import {Dismiss, DismissOptions} from "flowbite";
@@ -26,7 +26,7 @@ import {ClipService} from "../../Services/ClipService/clip.service";
   templateUrl: './upload.component.html',
   styleUrl: './upload.component.css'
 })
-export class UploadComponent implements OnInit {
+export class UploadComponent implements OnInit ,OnDestroy {
 
   // the property to store the state of the drop zone
   public isDragedOver: boolean = false;
@@ -45,6 +45,9 @@ export class UploadComponent implements OnInit {
   public showUploadSuccess: boolean = false;
   public showUploadError: boolean = false;
 
+  //the Upload Task property to cancel the task if the user exited the page during the Upload
+  public uploadTask?: AngularFireUploadTask
+
 
   //the user property to store the user data
   public user!: firebase.User | null
@@ -55,6 +58,11 @@ export class UploadComponent implements OnInit {
       this.user = user;
     })
   }
+
+  ngOnDestroy(): void {
+    //canceling the Upload if the component gor destroyed
+    this.uploadTask?.cancel();
+    }
 
   ngOnInit(): void {
 
@@ -96,13 +104,13 @@ export class UploadComponent implements OnInit {
 
 
     //uploading the file to the storage bucket using the Firebase storage service
-    const uploadTask = this._store.upload(clipPath, this.dropedFile)
+   this.uploadTask = this._store.upload(clipPath, this.dropedFile)
 
     //creating clipRef to get the download URL of the file uploaded
     const clipRef = this._store.ref(clipPath);
 
     //the observable to get the percentage of the file uploaded
-    uploadTask.percentageChanges().subscribe((progress) => {
+    this.uploadTask.percentageChanges().subscribe((progress) => {
       this.uploadPercentage = (progress as number / 100);
     });
 
@@ -114,7 +122,7 @@ export class UploadComponent implements OnInit {
     };
 
     //showing the success alert
-    uploadTask.snapshotChanges().pipe(last(), switchMap(() => {
+    this.uploadTask.snapshotChanges().pipe(last(), switchMap(() => {
       return clipRef.getDownloadURL()
     })).subscribe({
 

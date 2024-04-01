@@ -14,7 +14,7 @@ export class ClipService {
     this.ClipsCollection =  db.collection('Clips');
   }
 
-  public async AddClip(clip : IClip) {
-    await this.ClipsCollection.add(clip);
+  public async AddClip(clip : IClip){
+    return await this.ClipsCollection.add(clip);
   }
 }

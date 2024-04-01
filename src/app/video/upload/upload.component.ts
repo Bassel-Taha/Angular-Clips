@@ -5,7 +5,7 @@ import {log} from "node:util";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {AngularFireStorage, AngularFireUploadTask} from "@angular/fire/compat/storage";
 import {v4} from 'uuid';
-import {last, switchMap, timer} from "rxjs";
+import {last, switchMap, timeout, timer} from "rxjs";
 import {Dismiss, DismissOptions} from "flowbite";
 import {subscribe} from "node:diagnostics_channel";
 import {error} from "@angular/compiler-cli/src/transformers/util";
@@ -13,6 +13,7 @@ import {AngularFireAuth} from "@angular/fire/compat/auth";
 import {FirebaseApp} from "@angular/fire/app";
 import firebase from "firebase/compat/app";
 import {ClipService} from "../../Services/ClipService/clip.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-upload',
@@ -52,7 +53,10 @@ export class UploadComponent implements OnInit ,OnDestroy {
   //the user property to store the user data
   public user!: firebase.User | null
 
-  constructor(private _store: AngularFireStorage, private auth: AngularFireAuth, private _clipservice: ClipService) {
+  constructor(private _store: AngularFireStorage,
+              private auth: AngularFireAuth,
+              private _clipservice: ClipService,
+              private _router : Router) {
     //getting the user data from the auth service to store it in the user property
     this.auth.user.subscribe(user => {
       this.user = user;
@@ -117,7 +121,7 @@ export class UploadComponent implements OnInit ,OnDestroy {
     //the options for the dismiss alert message
     const options: DismissOptions = {
       transition: 'transition-opacity',
-      duration: 1000,
+      duration: 900,
       timing: 'ease-out'
     };
 
@@ -127,7 +131,7 @@ export class UploadComponent implements OnInit ,OnDestroy {
     })).subscribe({
 
       //handling the success of the file uploaded successfully by showing the success alert
-      next: (url) => {
+      next: async (url) => {
         let clip = {
           uid: this.user!.uid as string,
           displayName: this.user?.displayName as string,
@@ -136,8 +140,12 @@ export class UploadComponent implements OnInit ,OnDestroy {
           url: url
         }
         //adding the clip to the database
-        this._clipservice.AddClip(clip);
-        //console.log(clip);
+        let clipDocumentRef = await this._clipservice.AddClip(clip);
+        timer(1000).subscribe(
+          ()=>{
+            this._router.navigate(['clip' , clipDocumentRef.id])
+          },
+        )
 
         //hiding the progress alert
         this.showUploadAlert = false;

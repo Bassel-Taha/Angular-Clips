@@ -14,6 +14,7 @@ import {FirebaseApp} from "@angular/fire/app";
 import firebase from "firebase/compat/app";
 import {ClipService} from "../../Services/ClipService/clip.service";
 import {Router} from "@angular/router";
+import {IClip} from "../../models/IClip";
 
 @Component({
   selector: 'app-upload',
@@ -132,12 +133,13 @@ export class UploadComponent implements OnInit ,OnDestroy {
 
       //handling the success of the file uploaded successfully by showing the success alert
       next: async (url) => {
-        let clip = {
+        let clip : IClip = {
           uid: this.user!.uid as string,
           displayName: this.user?.displayName as string,
           title: this.Title.value,
           fileName: clipPath,
-          url: url
+          url: url,
+          TimeStamp : firebase.firestore.FieldValue.serverTimestamp()
         }
         //adding the clip to the database
         let clipDocumentRef = await this._clipservice.AddClip(clip);

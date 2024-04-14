@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router, RouterLink, RouterLinkActive} from "@angular/router";
+import {ClipService} from "../../Services/ClipService/clip.service";
 
 @Component({
   selector: 'app-manage',
@@ -14,7 +15,7 @@ import {ActivatedRoute, Router, RouterLink, RouterLinkActive} from "@angular/rou
 export class ManageComponent implements OnInit {
 
   VideoSort = '1';
-  constructor(private router : Router, private route : ActivatedRoute,  ) {
+  constructor(private router : Router, private route : ActivatedRoute, private clipService : ClipService) {
   }
 
   ngOnInit(): void {
@@ -23,6 +24,10 @@ export class ManageComponent implements OnInit {
       this.VideoSort = params['sort'] === '2' ? params['sort'] : '1';
     } );
 
+    // testing the getClips function in the service
+    this.clipService.GetUserClips().subscribe((clips) => {
+      console.log(clips);
+    })
   }
 
 

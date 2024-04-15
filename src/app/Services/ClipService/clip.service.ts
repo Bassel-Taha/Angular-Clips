@@ -33,7 +33,9 @@ export class ClipService {
       return query.get().then((res) => {
         //using the map operator to return the data of the clips as an array of IClip objects
         return res.docs.map((doc) => {
-          return doc.data() as IClip
+          let storedClip : IClip =  doc.data() as IClip;
+          storedClip.docId = doc.id;
+          return storedClip;
         })
       })
       }

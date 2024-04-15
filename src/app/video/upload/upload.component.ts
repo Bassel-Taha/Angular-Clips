@@ -28,7 +28,7 @@ import {IClip} from "../../models/IClip";
   templateUrl: './upload.component.html',
   styleUrl: './upload.component.css'
 })
-export class UploadComponent implements OnInit ,OnDestroy {
+export class UploadComponent implements OnDestroy {
 
   // the property to store the state of the drop zone
   public isDragedOver: boolean = false;
@@ -69,9 +69,6 @@ export class UploadComponent implements OnInit ,OnDestroy {
     this.uploadTask?.cancel();
     }
 
-  ngOnInit(): void {
-
-  }
 
   // the function to store the file dropped in the drop zone and set the is-dragged-over to false
   StoreFile($event : any) {

@@ -86,7 +86,7 @@ export class EditComponent implements OnInit, OnDestroy, OnChanges {
    }
     this.activeClib.title = this.Title.value;
    try {
-     this._clipService.UpdateClip(this.activeClib)
+      this._clipService.UpdateClip(this.activeClib)
    }
    catch (e)
    {

@@ -44,7 +44,7 @@ export class ClipService {
   }
 
 //function to update the clip from the database
-  UpdateClip(clip : IClip ){
-    return this.ClipsCollection.doc(clip.docId).update(clip);
+  async UpdateClip(clip : IClip ){
+     return await this.ClipsCollection.doc(clip.docId).update(clip);
   }
 }

@@ -54,5 +54,10 @@ export class ManageComponent implements OnInit {
   this._modalService.togelVisibility('editClipModal');
   }
 
+  DeleteClip($event: Event, clip: IClip) {
+    $event.preventDefault();
+    this.clipService.DeleteClip(clip);
+    this.clips = this.clips.filter((c) => c.docId !== clip.docId);
+  }
 }
 

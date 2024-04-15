@@ -12,7 +12,7 @@ export class ClipService {
 
   public ClipsCollection : AngularFirestoreCollection<IClip>
 
-  constructor(private db : AngularFirestore, private _auth : AngularFireAuth) {
+  constructor(private db : AngularFirestore, private _auth : AngularFireAuth , private _store : AngularFireStorage) {
     this.ClipsCollection =  db.collection('Clips');
 
   }
@@ -46,5 +46,13 @@ export class ClipService {
 //function to update the clip from the database
   async UpdateClip(clip : IClip ){
      return await this.ClipsCollection.doc(clip.docId).update(clip);
+  }
+
+  //function to delete the clip from the database
+
+  //todo : to delete the clip from the storage have to edit the rules in firebase to allow the authenticated user to delete the clip with put knowing the file size
+  async DeleteClip(clip : IClip){
+    await this._store.refFromURL(clip.url).delete();
+     await this.ClipsCollection.doc(clip.docId).delete();
   }
 }

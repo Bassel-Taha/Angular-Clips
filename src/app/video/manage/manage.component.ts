@@ -22,7 +22,9 @@ export class ManageComponent implements OnInit {
   VideoSort = '1';
 
   //array of the clips that the user has uploaded from the database
-  Clips : IClip[] = [];
+  clips : IClip[] = [];
+
+  activeClib : IClip | null = null ;
 
   constructor(private router : Router, private route : ActivatedRoute, private clipService : ClipService, private _modalService : ModalServiceService) {
   }
@@ -35,8 +37,7 @@ export class ManageComponent implements OnInit {
 
     // testing the getClips function in the service
     this.clipService.GetUserClips().subscribe((clips) => {
-      this.Clips = clips;
-      console.log(this.Clips);
+      this.clips = clips;
     })
   }
 
@@ -49,8 +50,9 @@ export class ManageComponent implements OnInit {
 
   TogelEditModal($event: Event, clip: IClip) {
   $event.preventDefault();
+  this.activeClib = clip;
   this._modalService.togelVisibility('editClipModal');
-
   }
+
 }
 

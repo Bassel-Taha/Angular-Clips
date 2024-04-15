@@ -16,7 +16,7 @@
 <div class="container mx-auto my-8">
   <!-- Video List -->
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-    @for (clip of Clips ; track $index)
+    @for (clip of clips ; track $index)
     {
       <div class="mt-6 rounded-tl-2xl rounded-br-2xl shadow-xl bg-secondary flex flex-col justify-start">
 
@@ -54,4 +54,4 @@
 </div>
 
 <!-- Edit Modal -->
-<app-edit></app-edit>
+<app-edit [activeClib]="activeClib" ></app-edit>

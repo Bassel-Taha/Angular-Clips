@@ -32,7 +32,7 @@ What things you need to install the software and how to install them:
 
 - Node.js
 - Angular CLI
-- JSON-Server
+- Fire Base
 
 ### Installing
 
@@ -40,17 +40,15 @@ A step by step series of examples that tell you how to get a development environ
 
 1. Clone the repo
 2. Install NPM packages: `npm install`
-3. Install JSON-Server: `npm install -g json-server`
-4. Start JSON-Server: `json-server --watch db.json`
+3. npm install -D tailwindcss@latest postcss@latest autoprefixer@latest
+4. npx tailwindcss init
+5. npm install flowbite
 
-## Deployment
-
-Add additional notes about how to deploy this on a live system.
 
 ## Built With
 
 - Angular - The web framework used
-- JSON-Server - Used to create a REST API and database
+- Firebase - For the backend Services and storage 
 
 
 

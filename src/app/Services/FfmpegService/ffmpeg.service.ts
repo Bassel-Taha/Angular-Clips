@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { createFFmpeg } from '@ffmpeg/ffmpeg';
+import { createFFmpeg , fetchFile , FS } from '@ffmpeg/ffmpeg';
 @Injectable({
   providedIn: 'root'
 })

@@ -1,5 +1,21 @@
 <!-- Main Content -->
 <section class="container mx-auto my-8 bg-secondary p-6">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 48
+    }
+  </style>
+  @if (FfmpegService.isReady === false) {
+
+    <span class="material-symbols-outlined animate-spin" >
+          settings
+        </span>
+  } @else {
   <div class="rounded relative flex flex-col">
     <div class="font-bold mb-6">Upload Video</div>
 
@@ -25,100 +41,103 @@
     <input type="file" class="m-5" (change)="StoreFile($event)">
 
     <!--Upload alert -->
-    <div  id="alert">
-    @if (showUploadAlert) {
-      <div
-        class="mt-5 flex items-center text-center p-4 mb-4 text-sm text-blue-400 border border-blue-800 rounded-lg bg-blue-950 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800"
-        role="alert">
-        <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-             fill="currentColor" viewBox="0 0 20 20">
-          <path
-            d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-        </svg>
-        <span class="sr-only">Info</span>
-        <div>
-          <span class="font-medium">{{ alertMessage }}</span> The Upload Percentage is {{ uploadPercentage | percent }}
+    <div id="alert">
+      @if (showUploadAlert) {
+        <div
+          class="mt-5 flex items-center text-center p-4 mb-4 text-sm text-blue-400 border border-blue-800 rounded-lg bg-blue-950 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800"
+          role="alert">
+          <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+               fill="currentColor" viewBox="0 0 20 20">
+            <path
+              d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+          </svg>
+          <span class="sr-only">Info</span>
+          <div>
+            <span class="font-medium">{{ alertMessage }}</span> The Upload Percentage
+            is {{ uploadPercentage | percent }}
+          </div>
         </div>
-      </div>
-    }
+      }
     </div>
     <!--Upload Error alert -->
     <div id="alertError">
-    @if (showUploadError) {
-      <div
-           class="mt-5 flex items-center text-center p-4 mb-4 text-sm text-red-400 border border-red-800 rounded-lg bg-red-900"
-           role="alert">
-        <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-             fill="currentColor" viewBox="0 0 20 20">
-          <path
-            d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-        </svg>
-        <span class="sr-only">Info</span>
-        <div>
-          <span class="font-medium">Something went wrong during Uploading. Please try again later</span>
+      @if (showUploadError) {
+        <div
+          class="mt-5 flex items-center text-center p-4 mb-4 text-sm text-red-400 border border-red-800 rounded-lg bg-red-900"
+          role="alert">
+          <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+               fill="currentColor" viewBox="0 0 20 20">
+            <path
+              d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+          </svg>
+          <span class="sr-only">Info</span>
+          <div>
+            <span class="font-medium">Something went wrong during Uploading. Please try again later</span>
+          </div>
         </div>
-      </div>
-    }
+      }
     </div>
+
 
     <!--Upload Success alert -->
     <div id="alertSuccess">
-    @if (showUploadSuccess) {
-      <div
-           class="mt-5 flex items-center text-center p-4 mb-4 text-sm text-green-400 border border-green-800 rounded-lg bg-green-900"
-           role="alert">
-        <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-             fill="currentColor" viewBox="0 0 20 20">
-          <path
-            d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-        </svg>
-        <span class="sr-only">Info</span>
-        <div>
-          <span class="font-medium">The file is uploaded successfully</span>
+      @if (showUploadSuccess) {
+        <div
+          class="mt-5 flex items-center text-center p-4 mb-4 text-sm text-green-400 border border-green-800 rounded-lg bg-green-900"
+          role="alert">
+          <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+               fill="currentColor" viewBox="0 0 20 20">
+            <path
+              d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+          </svg>
+          <span class="sr-only">Info</span>
+          <div>
+            <span class="font-medium">The file is uploaded successfully</span>
+          </div>
         </div>
-      </div>
-    }
+      }
     </div>
 
     <!-- Video Editor -->
     <div>
+        @if (dropedFile !== null) {
+          <!-- Form -->
+          <form [formGroup]="TitleFormGroup" (ngSubmit)="UploadFile()">
+            <!-- Screenshots -->
+            <h2 class="mb-4 text-xl">Select a Thumbnail</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              <div class="border-8 cursor-pointer border-green-400">
+                <img src="assets/img/1.jpg">
+              </div>
+              <div class="border-8 cursor-pointer border-transparent">
+                <img src="assets/img/2.jpg">
+              </div>
+              <div class="border-8 cursor-pointer border-transparent">
+                <img src="assets/img/3.jpg">
+              </div>
+            </div>
 
-      @if (dropedFile !== null) {
-        <!-- Form -->
-        <form [formGroup]="TitleFormGroup" (ngSubmit)="UploadFile()">
-          <!-- Screenshots -->
-          <h2 class="mb-4 text-xl">Select a Thumbnail</h2>
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <div class="border-8 cursor-pointer border-green-400">
-              <img src="assets/img/1.jpg">
-            </div>
-            <div class="border-8 cursor-pointer border-transparent">
-              <img src="assets/img/2.jpg">
-            </div>
-            <div class="border-8 cursor-pointer border-transparent">
-              <img src="assets/img/3.jpg">
-            </div>
-          </div>
-
-          <!-- Title -->
-          <div class="mt-4">
-            <label class="block text-xl mb-4">Title</label>
-            <input [formControl]="Title" type="text" class="block w-full py-1.5 px-3 text-gray-200 border border-gray-400 transition
+            <!-- Title -->
+            <div class="mt-4">
+              <label class="block text-xl mb-4">Title</label>
+              <input [formControl]="Title" type="text" class="block w-full py-1.5 px-3 text-gray-200 border border-gray-400 transition
             duration-500 focus:outline-none rounded bg-transparent focus:border-indigo-400">
-            @if (Title.getError('required') && Title.touched) {
-              <p class="text-red-400 text-sm">Title is required</p>
-            }
-          </div>
+              @if (Title.getError('required') && Title.touched) {
+                <p class="text-red-400 text-sm">Title is required</p>
+              }
+            </div>
 
-          <div class="mt-4 text-right">
-            <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none
+            <div class="mt-4 text-right">
+              <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none
           disabled:opacity-50 disabled:bg-indigo-400"
-                    [disabled]="TitleFormGroup.invalid || insubmition">
-              Publish
-            </button>
-          </div>
-        </form>
-      }
+                      [disabled]="TitleFormGroup.invalid || insubmition">
+                Publish
+              </button>
+            </div>
+          </form>
+        }
+
     </div>
   </div>
+  }
 </section>

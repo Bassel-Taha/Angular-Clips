@@ -15,6 +15,7 @@ import firebase from "firebase/compat/app";
 import {ClipService} from "../../Services/ClipService/clip.service";
 import {Router} from "@angular/router";
 import {IClip} from "../../models/IClip";
+import {FfmpegService} from "../../Services/FfmpegService/ffmpeg.service";
 
 @Component({
   selector: 'app-upload',
@@ -38,6 +39,8 @@ export class UploadComponent implements OnDestroy {
   public Title = new FormControl('', {validators: [Validators.required, Validators.minLength(3)], nonNullable: true})
   //the formGroup for the title forms
   public TitleFormGroup: FormGroup = new FormGroup({Title: this.Title});
+  //Ffmpeg Ready prop to check if the ffmpeg is ready to be used
+
 
   //the alert showing properties
   public insubmition: boolean = false;
@@ -57,11 +60,14 @@ export class UploadComponent implements OnDestroy {
   constructor(private _store: AngularFireStorage,
               private auth: AngularFireAuth,
               private _clipservice: ClipService,
-              private _router : Router) {
+              private _router : Router,
+              public FfmpegService: FfmpegService) {
     //getting the user data from the auth service to store it in the user property
     this.auth.user.subscribe(user => {
       this.user = user;
     })
+    this.FfmpegService.Init();
+
   }
 
   ngOnDestroy(): void {
@@ -89,6 +95,9 @@ export class UploadComponent implements OnDestroy {
       this.dropedFile = null;
       return console.error('The file is not a video file');
     }
+    //saving the file to the ffmpeg memory to be used later
+
+
     this.Title.setValue(this.dropedFile.name.replace(/\.[^/.]+$/, ""));
   }
 

@@ -5,6 +5,7 @@
 /tmp
 /out-tsc
 /bazel-out
+/Rust_WSAM
 
 # Node
 /node_modules

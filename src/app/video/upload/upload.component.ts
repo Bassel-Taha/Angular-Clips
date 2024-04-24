@@ -77,7 +77,7 @@ export class UploadComponent implements OnDestroy {
 
 
   // the function to store the file dropped in the drop zone and set the is-dragged-over to false
-  StoreFile($event : any) {
+  async StoreFile($event : any) {
 
 
     this.isDragedOver = false;
@@ -96,7 +96,7 @@ export class UploadComponent implements OnDestroy {
       return console.error('The file is not a video file');
     }
     //saving the file to the ffmpeg memory to be used later
-
+    await this.FfmpegService.GetScreenShot(this.dropedFile);
 
     this.Title.setValue(this.dropedFile.name.replace(/\.[^/.]+$/, ""));
   }

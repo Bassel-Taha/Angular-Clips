@@ -26,6 +26,8 @@ export class FfmpegService {
       this.isReady = true;
     }
   }
+
+
   // the async function to store the files in the ffmpeg memory to be used later and getting the screenshots from the video
   async GetScreenShot(dropedFile: File) {
     // the fetchFile method convert the file to a binary data and store it in the data variable to be stored using the FS method
@@ -55,7 +57,24 @@ export class FfmpegService {
     this.ffmpeg.run(
       ...comands
     )
-  }
-
-
+    //the array to store the screenshots urls
+    let screenshos : string[] = [];
+    //the array to store the binary data of the screenshots
+    let screenshotsBinaryData : any = [];
+    //getting the binary data of the screenshots and storing it in the screenshotsBinaryData array and storing the url of the screenshots in the screenshots array
+    seconds.forEach((second) => {
+      //getting the binary data of the screenshots from the filesystem of the ffmpeg by the name of the file
+      let binarydata = this.ffmpeg.FS('readFile', `outPut_${second}.png`);
+      //pushing the binary data to the screenshotsBinaryData array
+      screenshotsBinaryData.push(binarydata);
+      //creating a blob from the binary data to create a url from it
+      let screenshotblob = new Blob([binarydata], {type: 'image/png'});
+      //creating a url from the blob to be used in the img tag
+      let screenshoturl = URL.createObjectURL(screenshotblob);
+      screenshos.push(screenshoturl);
+    })
+    return screenshos;
 }
+}
+
+

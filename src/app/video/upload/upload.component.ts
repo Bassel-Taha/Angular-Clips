@@ -96,7 +96,8 @@ export class UploadComponent implements OnDestroy {
       return console.error('The file is not a video file');
     }
     //saving the file to the ffmpeg memory to be used later
-    await this.FfmpegService.GetScreenShot(this.dropedFile);
+    let screenshots =  await this.FfmpegService.GetScreenShot(this.dropedFile);
+    console.error(screenshots.length);
 
     this.Title.setValue(this.dropedFile.name.replace(/\.[^/.]+$/, ""));
   }

@@ -32,19 +32,28 @@ export class FfmpegService {
     let data = await fetchFile(dropedFile)
     //saving the pinary data from the file to a separate memory for Ffmpeg to use the stored data later
     this.ffmpeg.FS("writeFile", dropedFile.name, data)
+
+    const seconds = [1,10,20];
+    const comands :string[] = [];
+    seconds.forEach((second) => {
+      comands.push(
+        //todo Input
+        '-i', dropedFile.name,
+        //todo OutPut Options
+        //getting the timestamp in the specified timing
+        '-ss', `00:00:${second}`,
+        //taking on frame only in the specified timing
+        '-frames:v', '1',
+        //using the filter command and the scalling mehtod
+        '-filter:v', 'scale=510:-1',
+        //todo OutPutName
+        `outPut_${second}.png`
+      )
+    })
+
     //using the FFmpeg.run function to run ffmpeg using WASM instead of installing ffmpeg on my computer
     this.ffmpeg.run(
-      //todo Input
-       '-i', dropedFile.name,
-      //todo OutPut Options
-      //getting the timestamp in the specified timing
-      '-ss','00:00:01',
-      //taking on frame only in the specified timing using the filter command and the scalling mehtod
-      '-frames:v' , '1',
-
-      '-filter:v', 'scale=510:-1',
-      //todo OutPutName
-      'outPut_01.png'
+      ...comands
     )
   }
 

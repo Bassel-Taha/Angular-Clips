@@ -59,6 +59,11 @@ export class UploadComponent implements OnDestroy {
   //the user property to store the user data
   public user!: firebase.User | null
 
+  //prop to store the selected screenshot from the dom
+  public selectedScreenShot : string = "";
+
+
+
   constructor(private _store: AngularFireStorage,
               private auth: AngularFireAuth,
               private _clipservice: ClipService,
@@ -101,7 +106,9 @@ export class UploadComponent implements OnDestroy {
     //saving the file to the ffmpeg memory to be used later
     this.screenshots =  await this.FfmpegService.GetScreenShot(this.dropedFile);
 
-    console.error(this.screenshots);
+    //setting the selected screenshot to the first screenshot and doing that here because if i did it while initializing the porp then the array would be empty
+    this.selectedScreenShot = this.screenshots[0];
+
     //setting the title of the video to the name of the video file without the extension
     this.Title.setValue(this.dropedFile.name.replace(/\.[^/.]+$/, ""));
     this.TitleFormGroup.enable();

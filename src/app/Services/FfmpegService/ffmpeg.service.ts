@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { createFFmpeg , fetchFile  } from '@ffmpeg/ffmpeg';
+import {timer} from "rxjs";
 @Injectable({
   providedIn: 'root'
 })
@@ -8,6 +9,7 @@ export class FfmpegService {
   // the boolean value to check if the ffmpeg is loaded and ready to be used or not
   isReady : boolean = false;
   private ffmpeg : any;
+  screenshotsReady : boolean = false;
   constructor() {
     // creating the ffmpeg instance and setting the log to true to log all the activities of the ffmpeg to the console
     this.ffmpeg = createFFmpeg({log: true});
@@ -54,25 +56,27 @@ export class FfmpegService {
     })
 
     //using the FFmpeg.run function to run ffmpeg using WASM instead of installing ffmpeg on my computer
-    this.ffmpeg.run(
+    await this.ffmpeg.run(
       ...comands
     )
     //the array to store the screenshots urls
     let screenshos : string[] = [];
     //the array to store the binary data of the screenshots
     let screenshotsBinaryData : any = [];
-    //getting the binary data of the screenshots and storing it in the screenshotsBinaryData array and storing the url of the screenshots in the screenshots array
-    seconds.forEach((second) => {
-      //getting the binary data of the screenshots from the filesystem of the ffmpeg by the name of the file
-      let binarydata = this.ffmpeg.FS('readFile', `outPut_${second}.png`);
-      //pushing the binary data to the screenshotsBinaryData array
-      screenshotsBinaryData.push(binarydata);
-      //creating a blob from the binary data to create a url from it
-      let screenshotblob = new Blob([binarydata], {type: 'image/png'});
-      //creating a url from the blob to be used in the img tag
-      let screenshoturl = URL.createObjectURL(screenshotblob);
-      screenshos.push(screenshoturl);
-    })
+
+      //getting the binary data of the screenshots and storing it in the screenshotsBinaryData array and storing the url of the screenshots in the screenshots array
+      seconds.forEach((second) => {
+        //getting the binary data of the screenshots from the filesystem of the ffmpeg by the name of the file
+         let binarydata = this.ffmpeg.FS('readFile', `outPut_${second}.png`);
+        //pushing the binary data to the screenshotsBinaryData array
+        screenshotsBinaryData.push(binarydata);
+        //creating a blob from the binary data to create a url from it
+        let screenshotblob = new Blob([binarydata], {type: 'image/png'});
+        //creating a url from the blob to be used in the img tag
+        let screenshoturl = URL.createObjectURL(screenshotblob);
+        screenshos.push(screenshoturl);
+      })
+      this.screenshotsReady = true;
     return screenshos;
 }
 }

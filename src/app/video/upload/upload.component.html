@@ -10,6 +10,7 @@
         'opsz' 48
     }
   </style>
+  <!--checking if ffmpeg in ready and loaded to the app to process the videos then render the form group-->
   @if (FfmpegService.isReady === false) {
 
     <span class="material-symbols-outlined animate-spin" >
@@ -34,6 +35,13 @@
       @if (dropedFile == null) {
         <h5>Drop your file here (mp4 only!)</h5>
       } @else {
+        @if (FfmpegService.screenshotsReady === false)
+        {
+          <span class="material-symbols-outlined animate-spin" >
+          settings
+        </span>
+          <h6 class="text-center ">processing the video....</h6>
+        }
         <h5>{{ dropedFile.name }}</h5>
       }
     </div>
@@ -104,18 +112,16 @@
           <!-- Form -->
           <form [formGroup]="TitleFormGroup" (ngSubmit)="UploadFile()">
             <!-- Screenshots -->
+
             <h2 class="mb-4 text-xl">Select a Thumbnail</h2>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              @for (image of screenshots ; track $index) {
               <div class="border-8 cursor-pointer border-green-400">
-                <img src="assets/img/1.jpg">
+                <img [src]="image">
               </div>
-              <div class="border-8 cursor-pointer border-transparent">
-                <img src="assets/img/2.jpg">
-              </div>
-              <div class="border-8 cursor-pointer border-transparent">
-                <img src="assets/img/3.jpg">
-              </div>
+              }
             </div>
+
 
             <!-- Title -->
             <div class="mt-4">

@@ -29,6 +29,7 @@ import {FfmpegService} from "../../Services/FfmpegService/ffmpeg.service";
   templateUrl: './upload.component.html',
   styleUrl: './upload.component.css'
 })
+
 export class UploadComponent implements OnDestroy {
 
   // the property to store the state of the drop zone
@@ -41,7 +42,6 @@ export class UploadComponent implements OnDestroy {
   public TitleFormGroup: FormGroup = new FormGroup({Title: this.Title});
   //Ffmpeg Ready prop to check if the ffmpeg is ready to be used
 
-
   //the alert showing properties
   public insubmition: boolean = false;
   public showUploadAlert: boolean = false;
@@ -53,6 +53,8 @@ export class UploadComponent implements OnDestroy {
   //the Upload Task property to cancel the task if the user exited the page during the Upload
   public uploadTask?: AngularFireUploadTask
 
+  //property to store the images URls in an array of strings
+  public screenshots: string[] = [];
 
   //the user property to store the user data
   public user!: firebase.User | null
@@ -95,11 +97,14 @@ export class UploadComponent implements OnDestroy {
       this.dropedFile = null;
       return console.error('The file is not a video file');
     }
+    this.TitleFormGroup.disable();
     //saving the file to the ffmpeg memory to be used later
-    let screenshots =  await this.FfmpegService.GetScreenShot(this.dropedFile);
-    console.error(screenshots.length);
+    this.screenshots =  await this.FfmpegService.GetScreenShot(this.dropedFile);
 
+    console.error(this.screenshots);
+    //setting the title of the video to the name of the video file without the extension
     this.Title.setValue(this.dropedFile.name.replace(/\.[^/.]+$/, ""));
+    this.TitleFormGroup.enable();
   }
 
   UploadFile() {

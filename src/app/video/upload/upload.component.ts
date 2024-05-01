@@ -1,16 +1,12 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {EventBlockerDirective} from "../../shared/directives/event-blocker.directive";
 import {NgClass, PercentPipe} from "@angular/common";
-import {log} from "node:util";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {AngularFireStorage, AngularFireUploadTask} from "@angular/fire/compat/storage";
 import {v4} from 'uuid';
-import {last, switchMap, timeout, timer} from "rxjs";
+import {last, switchMap, timer} from "rxjs";
 import {Dismiss, DismissOptions} from "flowbite";
-import {subscribe} from "node:diagnostics_channel";
-import {error} from "@angular/compiler-cli/src/transformers/util";
 import {AngularFireAuth} from "@angular/fire/compat/auth";
-import {FirebaseApp} from "@angular/fire/app";
 import firebase from "firebase/compat/app";
 import {ClipService} from "../../Services/ClipService/clip.service";
 import {Router} from "@angular/router";
@@ -51,7 +47,10 @@ export class UploadComponent implements OnDestroy {
   public showUploadError: boolean = false;
 
   //the Upload Task property to cancel the task if the user exited the page during the Upload
-  public uploadTask?: AngularFireUploadTask
+  public uploadTask?: AngularFireUploadTask;
+
+  //the Upload Task property to observe the upload process and  cancel the task if the user exited the page during the Upload
+  public ScreenshotsUploadTask?: AngularFireUploadTask;
 
   //property to store the images URls in an array of strings
   public screenshots: string[] = [];
@@ -104,7 +103,7 @@ export class UploadComponent implements OnDestroy {
     }
     this.TitleFormGroup.disable();
     //saving the file to the ffmpeg memory to be used later
-    this.screenshots =  await this.FfmpegService.GetScreenShot(this.dropedFile);
+    this.screenshots =  await this.FfmpegService.GetScreenShotAsync(this.dropedFile);
 
     //setting the selected screenshot to the first screenshot and doing that here because if i did it while initializing the porp then the array would be empty
     this.selectedScreenShot = this.screenshots[0];
@@ -114,13 +113,19 @@ export class UploadComponent implements OnDestroy {
     this.TitleFormGroup.enable();
   }
 
-  UploadFile() {
+  async UploadFile() {
     //disabling the form so that the user cant change the form after stating the upload
     this.TitleFormGroup.disable();
     //creating a unique file name for the file to be uploaded
     const clipeFileName = v4();
     //the path to store the file in the storage bucket to make all the files in the same folder
     const clipPath = `clips/${clipeFileName}.mp4`;
+    //the path to store the screenshots in the storage bucket to make all the files in the same folder
+    const ScreenshotsPath = `ScreenShots/${clipeFileName}.png`;
+
+    //getting the screenshots as a blob from the Url of the snapshot using the functions created in ffmpeg service
+    let blobOfTheSelectedScreenShot = await this.FfmpegService.GetBlobsFromUrlsAsync(this.selectedScreenShot);
+
 
     //setting the alert message and the insubmition to true to show the alert
     this.showUploadAlert = true;
@@ -129,6 +134,9 @@ export class UploadComponent implements OnDestroy {
 
     //uploading the file to the storage bucket using the Firebase storage service
    this.uploadTask = this._store.upload(clipPath, this.dropedFile)
+
+    //uploading the screenshots to the storage bucket using the Firebase storage service
+    this.ScreenshotsUploadTask = this._store.upload(ScreenshotsPath, blobOfTheSelectedScreenShot);
 
     //creating clipRef to get the download URL of the file uploaded
     const clipRef = this._store.ref(clipPath);

@@ -4,7 +4,7 @@ import {NgClass, PercentPipe} from "@angular/common";
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {AngularFireStorage, AngularFireUploadTask} from "@angular/fire/compat/storage";
 import {v4} from 'uuid';
-import {last, switchMap, timer} from "rxjs";
+import {last, switchMap, timer, combineLatest} from "rxjs";
 import {Dismiss, DismissOptions} from "flowbite";
 import {AngularFireAuth} from "@angular/fire/compat/auth";
 import firebase from "firebase/compat/app";
@@ -142,9 +142,16 @@ export class UploadComponent implements OnDestroy {
     const clipRef = this._store.ref(clipPath);
 
     //the observable to get the percentage of the file uploaded
-    this.uploadTask.percentageChanges().subscribe((progress) => {
-      this.uploadPercentage = (progress as number / 100);
-    });
+    //the percentage is the average between the percebtage of the video upload and the snapshot upload
+    //using the cobinelatest to get the latest value of the percentage of the video and the screenshot upload and then calculating the average
+    combineLatest([this.uploadTask.percentageChanges() , this.ScreenshotsUploadTask.percentageChanges()]).subscribe(([videoProgress , screenshotProgress])=>{
+     //checking if the videoProgress or the screenshotProgress is null to avoid the error of the null value
+      if (!videoProgress || !screenshotProgress)
+     {
+        return;
+     }
+      this.uploadPercentage = (videoProgress as number + screenshotProgress as number) / 200;
+    })
 
     //the options for the dismiss alert message
     const options: DismissOptions = {

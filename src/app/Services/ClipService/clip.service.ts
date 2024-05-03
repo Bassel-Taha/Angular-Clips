@@ -53,6 +53,11 @@ export class ClipService {
   //todo : to delete the clip from the storage have to edit the rules in firebase to allow the authenticated user to delete the clip with put knowing the file size
   async DeleteClip(clip : IClip){
     await this._store.refFromURL(clip.url).delete();
+//getting the storage reference of the screenshot
+    const screenshotref = this._store.ref(`ScreenShots/${clip.screenshotname}.png`)
      await this.ClipsCollection.doc(clip.docId).delete();
+     await this.ClipsCollection.doc()
+    //deleting the screenshot from the storage
+    screenshotref.delete();
   }
 }

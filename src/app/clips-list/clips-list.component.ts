@@ -1,6 +1,4 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {preserveWhitespacesDefault} from "@angular/compiler";
-
 @Component({
   selector: 'app-clips-list',
   standalone: true,
@@ -12,16 +10,23 @@ export class ClipsListComponent implements OnInit, OnDestroy{
 
   constructor() { }
 
+
+  //todo: the error here is due to nodejs not supporting the window object
+  //todo: to fix this error you need to add the condition to check if the window object is defined or not to be used only in the browser
   ngOnInit(): void {
-    window.addEventListener('scroll' , this.handelScroll);
+    if (typeof window !== 'undefined') {
+        window.addEventListener('scroll' , this.handelScroll);
+      }
   }
 
   ngOnDestroy(): void {
-        window.removeEventListener('scroll', this.handelScroll)
+    if (typeof window !== 'undefined'){
+      window.removeEventListener('scroll', this.handelScroll)
+    }
     }
 
 
-  private handelScroll() {
+   private handelScroll = () => {
     //destructuring the properties of the document object
     const {scrollTop , offsetHeight } = document.documentElement;
     const {innerHeight} = window;

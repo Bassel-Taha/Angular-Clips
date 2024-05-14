@@ -9,9 +9,11 @@ import {retry, switchMap, of} from "rxjs";
   providedIn: 'any'
 })
 export class ClipService {
-
+//creating a collection of clips
   public ClipsCollection : AngularFirestoreCollection<IClip>
-
+//storing the loaded Clibs to keep track of the last clip to request the rest of the clips staring form the last clip
+  public pageClibs : IClip[] = [];
+  public pendingClipsRequest :boolean = false;
   constructor(private db : AngularFirestore, private _auth : AngularFireAuth , private _store : AngularFireStorage) {
     this.ClipsCollection =  db.collection('Clips');
 
@@ -59,5 +61,43 @@ export class ClipService {
      await this.ClipsCollection.doc()
     //deleting the screenshot from the storage
     screenshotref.delete();
+  }
+
+
+  //function to get the clips from the database
+  async GetClips (){
+
+    //checking if there is a pending request
+    if (this.pendingClipsRequest === true) {
+    return
+    }
+    //setting the pending request to true
+    this.pendingClipsRequest = true;
+      //query the database for the clips and order them by the timestamp and limit the results to 6
+      let query = this.ClipsCollection.ref.orderBy(`timestamp`, 'desc').limit(6);
+
+      //getting the length of the loaded clips
+      let {length} = this.pageClibs;
+
+      let lastClipId = this.pageClibs[length - 1]?.docId;
+      //get the last clip snapshot so that is can be used by the startAfter function to get the next 6 clips
+      let lastClipSnapShot = await this.ClipsCollection.doc(lastClipId).get().toPromise();
+
+      query = query.startAt(lastClipSnapShot);
+
+      //getting the query snapshot
+      let snapshot = await query.get();
+
+      //pushing the snapshot to the pageClips array
+      snapshot.forEach((doc) => {
+        this.pageClibs.push({
+          ...doc.data() as IClip,
+          docId : doc.id
+        })
+      })
+
+      //setting the pending request to false
+      this.pendingClipsRequest = false;
+
   }
 }

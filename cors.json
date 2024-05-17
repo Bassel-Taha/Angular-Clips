@@ -1,6 +1,7 @@
 [{
-  "origin": "*",
-  "responseHeader": "Content-Type",
-  "methods": "GET",
-  "maxAgeSeconds": 3600
+  "origin": ["*"],
+  "responseHeader": ["Content-Type"],
+  "methods": ["GET"],
+  "Access-Control-Allow-Origin": ["*"],
+  "maxAgeSeconds":  3600
 }]

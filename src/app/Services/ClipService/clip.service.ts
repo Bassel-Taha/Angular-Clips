@@ -86,9 +86,8 @@ export class ClipService {
     if (length) {
       let lastClipDocId = this.pageClibs[length - 1]?.docId;
       //get the last clip snapshot so that is can be used by the startAfter function to get the next 6 clips
-      let lastClipSnapShot = await firstValueFrom(this.ClipsCollection.doc(lastClipDocId).get());
+      let lastClipSnapShot = await this.ClipsCollection.doc(lastClipDocId).get().toPromise();
       //setting the query to start after the last clip snapshot
-      console.log(lastClipSnapShot)
       query = query.startAt(lastClipSnapShot);
     }
     //getting the query snapshot
@@ -98,11 +97,12 @@ export class ClipService {
 
     //pushing the snapshot to the pageClips array
     snapshot.forEach((doc) => {
+      if (!this.pageClibs.find(clip => clip.docId === doc.id)) {
         this.pageClibs.push({
           ...doc.data() as IClip,
           docId: doc.id
         })
-
+      }
     })
 
     //setting the pending request to false

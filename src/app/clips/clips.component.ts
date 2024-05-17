@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, RouterLink} from "@angular/router";
+import {ClipService} from "../Services/ClipService/clip.service";
 
 @Component({
   selector: 'app-clips',

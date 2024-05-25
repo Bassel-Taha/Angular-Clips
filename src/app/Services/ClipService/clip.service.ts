@@ -80,7 +80,7 @@ export class ClipService {
 
     //getting the length of the loaded clips
     let {length} = this.pageClibs;
-    console.log(`length is ${length}`)
+    /*console.log(`length is ${length}`)*/
 
     //checking if the length is greater than 0 to get the last clip snapshot to start the query from the last clip
     if (length) {

@@ -1,12 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, RouterLink} from "@angular/router";
 import {ClipService} from "../Services/ClipService/clip.service";
+import {ClipsListComponent} from "../clips-list/clips-list.component";
 
 @Component({
   selector: 'app-clips',
   standalone: true,
   imports: [
-    RouterLink
+    RouterLink,
+    ClipsListComponent
   ],
   templateUrl: './clips.component.html',
   styleUrl: './clips.component.css'

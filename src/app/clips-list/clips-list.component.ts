@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, input, OnDestroy, OnInit} from '@angular/core';
 import {ClipService} from "../Services/ClipService/clip.service";
 import {RouterLink} from "@angular/router";
 
@@ -13,6 +13,8 @@ import {RouterLink} from "@angular/router";
 })
 export class ClipsListComponent implements OnInit, OnDestroy {
 
+  @Input() Scrolable: boolean = true;
+
   constructor(public _clipsService: ClipService) {
     //calling the function when the component is initialized
     this._clipsService.GetClips();
@@ -23,14 +25,19 @@ export class ClipsListComponent implements OnInit, OnDestroy {
   //todo: to fix this error you need to add the condition to check if the window object is defined or not to be used only in the browser
   ngOnInit() {
 
-    if (typeof window !== 'undefined') {
-      window.addEventListener('scroll', this.handelScroll);
+    if (this.Scrolable) {
+      if (typeof window !== 'undefined') {
+        window.addEventListener('scroll', this.handelScroll);
+      }
     }
   }
 
   ngOnDestroy(): void {
-    if (typeof window !== 'undefined') {
-      window.removeEventListener('scroll', this.handelScroll)
+
+    if (this.Scrolable) {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('scroll', this.handelScroll)
+      }
     }
   }
 
